@@ -3,204 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FounderLegal | 创业者法律合规工具箱</title>
+    <title>FounderLegal 4.0 | 创业者法律合规工作流引擎</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- 顶部平滑导航栏 -->
     <nav class="navbar">
         <div class="container nav-wrapper">
             <div class="logo">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span>FounderLegal</span>
+                <span>FounderLegal <small style="font-size:10px;font-weight:400;color:#3b82f6;">v4.0 Engine</small></span>
             </div>
             <div class="nav-scroll-container">
                 <ul class="nav-menu">
-                    <li><a href="#home" class="nav-item active">工作台</a></li>
-                    <li><a href="#cases" class="nav-item">合规案例</a></li>
-                    <li><a href="#consultation" class="nav-item">专家合规预约</a></li>
+                    <li><a href="#workspace-sec" class="nav-item active">合规工作台</a></li>
+                    <li><a href="#cases-sec" class="nav-item">最高院合规案例库</a></li>
+                    <li><a href="#consult-sec" class="nav-item">专家复核通道</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main id="home" class="page-section active">
+    <!-- 主界面区 -->
+    <main>
+        <!-- Header -->
         <header class="hero-header">
             <div class="container">
-                <h1>创业者法律数字化工具箱</h1>
-                <p class="subtitle">用可量化的数据与模型，前置防范股权、用工及知产商业风险</p>
+                <h1>创业者法律数字化工作流引擎</h1>
+                <p class="subtitle">固化 IRAC 严密法理架构，融合 2024 新公司法限期认缴制前置沙盘推演</p>
             </div>
         </header>
 
-        <section class="dashboard-banner">
-            <div class="container stats-grid">
-                <div class="info-block">
-                    <span class="block-title">股权架构安全线</span>
-                    <span class="block-value">67%</span>
-                    <span class="block-desc">绝对控制权生死线</span>
-                </div>
-                <div class="info-block">
-                    <span class="block-title">劳动争议高发期</span>
-                    <span class="block-value">6-18个月</span>
-                    <span class="block-desc">初创期未签合同双倍工资风险</span>
-                </div>
-                <div class="info-block">
-                    <span class="block-title">知产保护优先级</span>
-                    <span class="block-value">P0 级</span>
-                    <span class="block-desc">产品上线前必须检索商标</span>
+        <!-- 一、知识库和数据源：全新权威数据源连接器看板 -->
+        <section class="kb-banner-section">
+            <div class="container">
+                <div class="kb-connector-grid">
+                    <div class="kb-card">
+                        <span class="kb-badge badge-priority">优先源 (高可信)</span>
+                        <h4>最高法法官权威释义库</h4>
+                        <p>集成最高人民法院大模型案例库、民法典核心司法解释及类案裁判指引。</p>
+                    </div>
+                    <div class="kb-card">
+                        <span class="kb-badge badge-extended">扩展检索源</span>
+                        <h4>北大法宝 & 元典接口</h4>
+                        <p>动态对齐国家通用法律法规数据库、官方法规校验与实务操作指南。</p>
+                    </div>
+                    <div class="kb-card">
+                        <span class="kb-badge badge-warning">效力警示源</span>
+                        <h4>地方法院指导意见</h4>
+                        <p>实时检索各省高级人民法院用工与商事裁判意见，动态标注时效性与失效风险。</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="main-workspace">
+        <!-- 二、系统提示词与Skill：多步冷启动面试交互工作台 -->
+        <section id="workspace-sec" class="main-workspace section-padding">
             <div class="container">
                 <div class="workspace-card">
+                    
+                    <!-- 技能注册表快捷侧边栏 -->
                     <div class="tool-tabs">
-                        <button class="tool-tab-btn active" onclick="switchTool('career')">1. 职业规划与机会成本</button>
-                        <button class="tool-tab-btn" onclick="switchTool('equity')">2. 合伙人股权动态评估</button>
-                        <button class="tool-tab-btn" onclick="switchTool('diagnostic')">3. 企业合规风险自测</button>
+                        <div class="sidebar-title">⚡ 法律技能注册表 (Skills)</div>
+                        <button class="tool-tab-btn active" onclick="initInterview('cost-analysis')">/startup:cost-analysis<span class="cmd-desc">辞职创业成本量化</span></button>
+                        <button class="tool-tab-btn" onclick="initInterview('equity-calculation')">/startup:equity-calculation<span class="cmd-desc">合伙人股权分配审查</span></button>
+                        <button class="tool-tab-btn" onclick="initInterview('compliance-checklist')">/startup:compliance-checklist<span class="cmd-desc">法务合规差距体检</span></button>
                     </div>
 
+                    <!-- 动态面试引导舱 -->
                     <div class="tool-content-wrapper">
-                        
-                        <div id="tool-career" class="tool-panel active">
+                        <div id="interview-container">
                             <div class="panel-header">
-                                <h3>创业者职业规划与成本计算</h3>
-                                <p>理性量化“辞职创业”的沉没成本与期权/股权理论退出回报。</p>
+                                <h3 id="skill-title">正在加载法律技能引擎...</h3>
+                                <p id="skill-desc">请完成系统冷启动面试，以生成专属合规备忘录。</p>
                             </div>
-                            <div class="form-grid">
-                                <div class="form-item">
-                                    <label>放弃的当前年薪 (万元)</label>
-                                    <input type="number" id="currentSalary" value="40">
-                                </div>
-                                <div class="form-item">
-                                    <label>预期创业/深耕年限 (年)</label>
-                                    <input type="number" id="startupYears" value="3">
-                                </div>
-                                <div class="form-item">
-                                    <label>个人先期自筹投入资金 (万元)</label>
-                                    <input type="number" id="investAmount" value="20">
-                                </div>
-                                <div class="form-item">
-                                    <label>预计持股比例 (%)</label>
-                                    <input type="number" id="equityShare" value="15">
-                                </div>
-                                <div class="form-item full-width">
-                                    <label>下一轮预期公司投后估值 (万元)</label>
-                                    <input type="number" id="expectedValuation" value="3000">
-                                </div>
+                            
+                            <!-- 进度条 -->
+                            <div class="progress-bar-container">
+                                <div id="progress-indicator" class="progress-indicator" style="width: 20%;"></div>
                             </div>
-                            <button class="btn-action" onclick="runCareerCalc()">开始规划测算</button>
-                            <div id="careerResult" class="analysis-report" style="display:none;"></div>
+
+                            <!-- 动态问题渲染插槽 -->
+                            <div id="question-box" class="question-box">
+                                <!-- JS 动态注入 -->
+                            </div>
+
+                            <div class="interview-actions">
+                                <button id="btn-prev" class="btn-secondary" onclick="prevQuestion()" style="display:none;">上一步</button>
+                                <button id="btn-next" class="btn-action" onclick="nextQuestion()">下一步</button>
+                            </div>
                         </div>
 
-                        <div id="tool-equity" class="tool-panel">
-                            <div class="panel-header">
-                                <h3>合伙人股权分配合理度评估</h3>
-                                <p>根据合伙人的多维要素投入，科学测算建议持股权重，避免平分股权僵局。</p>
+                        <!-- 交付产物预览区（默认隐藏） -->
+                        <div id="deliverable-preview-area" class="deliverable-preview-area" style="display:none;">
+                            <div class="preview-header-bar">
+                                <span>📄 交付产物实时预览 (标准法务公文结构)</span>
+                                <button class="btn-copy-action" onclick="copyDeliverable()">📋 一键复制标准文本</button>
                             </div>
-                            <div class="matrix-table">
-                                <div class="matrix-row header">
-                                    <div>要素权重评估</div>
-                                    <div>创始人 (A)</div>
-                                    <div>联合创始人 (B)</div>
-                                </div>
-                                <div class="matrix-row">
-                                    <div>核心想法与初始技术产权提供方</div>
-                                    <div><select id="eq-idea-a"><option value="0.7">主导</option><option value="0.3">次要</option><option value="0">无</option></select></div>
-                                    <div><select id="eq-idea-b"><option value="0">无</option><option value="0.3">次要</option><option value="0.7">主导</option></select></div>
-                                </div>
-                                <div class="matrix-row">
-                                    <div>前期启动资金主要出资方</div>
-                                    <div><select id="eq-money-a"><option value="0.7">大头(>70%)</option><option value="0.3">小部分</option><option value="0">不出资</option></select></div>
-                                    <div><select id="eq-money-b"><option value="0">不出资</option><option value="0.3">小部分</option><option value="0.7">大头(>70%)</option></select></div>
-                                </div>
-                                <div class="matrix-row">
-                                    <div>全职精力和时间投入度</div>
-                                    <div><select id="eq-time-a"><option value="1.0">全职且不拿/拿低薪</option><option value="0.5">兼职支持</option></select></div>
-                                    <div><select id="eq-time-b"><option value="0.5">兼职支持</option><option value="1.0">全职且不拿/拿低薪</option></select></div>
-                                </div>
-                            </div>
-                            <button class="btn-action" onclick="runEquityCalc()">生成股权分配建议</button>
-                            <div id="equityResult" class="analysis-report" style="display:none;"></div>
-                        </div>
-
-                        <div id="tool-diagnostic" class="tool-panel">
-                            <div class="panel-header">
-                                <h3>初创企业法务健康风险体检</h3>
-                                <p>勾选您目前已落实的合规项，系统将实时评估您的法务漏洞及面临的法律追偿风险。</p>
-                            </div>
-                            <div class="checklist">
-                                <label class="check-item">
-                                    <input type="checkbox" class="diag-cb" value="25">
-                                    <span><b>公司设立与治理：</b>合伙人之间已签署书面的《合伙人股权分期成熟协议》（防止中途退出带走股权）</span>
-                                </label>
-                                <label class="check-item">
-                                    <input type="checkbox" class="diag-cb" value="25">
-                                    <span><b>知识产权合规：</b>公司核心品牌商标已提交注册申请，且技术人员签有《知识产权归属协议》</span>
-                                </label>
-                                <label class="check-item">
-                                    <input type="checkbox" class="diag-cb" value="25">
-                                    <span><b>劳资用工安全：</b>所有全职员工入职30天内均签署了正规劳动合同，并包含保密条款</span>
-                                </label>
-                                <label class="check-item">
-                                    <input type="checkbox" class="diag-cb" value="25">
-                                    <span><b>核心合同风控：</b>对外部核心供应商/大客户的业务合同，使用专业律师定制版而非网上盲目下载模板</span>
-                                </label>
-                            </div>
-                            <button class="btn-action" onclick="runDiagnosticCalc()">输出合规体检报告</button>
-                            <div id="diagnosticResult" class="analysis-report" style="display:none;"></div>
+                            <div id="memo-output-render" class="memo-output-render"></div>
                         </div>
 
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 知识库案例模块 -->
+        <section id="cases-sec" class="page-section section-padding">
+            <div class="container">
+                <div class="section-title-area">
+                    <h2>最高人民法院审判类案库</h2>
+                    <p>前车之鉴，基于真实司法判例解析初创期核心法律诉讼敞口</p>
+                </div>
+                <div class="cases-layout" id="casesGrid"></div>
+            </div>
+        </section>
+
+        <!-- 专家复核预约 -->
+        <section id="consult-sec" class="page-section section-padding">
+            <div class="container">
+                <div class="consult-box">
+                    <h2>对接执业创投律师进行二次人工审查</h2>
+                    <p>本系统输出成果为大模型辅助法务草稿，针对重大商事架构，建议由专业执业律师进行专项合规闭环审查。</p>
+                    <div class="form-grid">
+                        <div class="form-item">
+                            <label>负责人电话 / 微信</label>
+                            <input type="text" id="contactInfo" placeholder="用于接收律师修订版PDF">
+                        </div>
+                        <div class="form-item">
+                            <label>企业注册状态</label>
+                            <select id="compStage">
+                                <option value="seed">种子期（未注册/筹备中）</option>
+                                <option value="angel">天使期（已注册五年内实缴期）</option>
+                                <option value="preA">A轮后（已有外部机构股东）</option>
+                            </select>
+                        </div>
+                        <div class="form-item full-width">
+                            <label>需要律师介入的紧急争点说明 (Issue)</label>
+                            <textarea id="issueDesc" rows="4" placeholder="例如：离职合伙人拒绝交回公章及非成熟期股权，如何启动加速到期强制减资程序？"></textarea>
+                        </div>
+                    </div>
+                    <button class="btn-action" style="width:100%; text-align:center;" onclick="alert('已将本案工作流数据同步至后台，资深创投律师将在24小时内联系您。')">一键提请执业律师人工复核</button>
                 </div>
             </div>
         </section>
     </main>
 
-    <section id="cases" class="page-section section-padding">
-        <div class="container">
-            <div class="section-title-area">
-                <h2>商业法律合规案例</h2>
-                <p>前车之鉴，前置解构初创企业高频诉讼泥潭</p>
-            </div>
-            <div class="cases-layout" id="casesGrid"></div>
-        </div>
-    </section>
-
-    <section id="consultation" class="page-section section-padding">
-        <div class="container">
-            <div class="consult-box">
-                <h2>对接专业公司法务团队</h2>
-                <p>提交您的基本诉求，资深创投律师将在 24 小时内为您梳理法律闭环。</p>
-                <div class="form-grid">
-                    <div class="form-item">
-                        <label>负责人电话 / 微信</label>
-                        <input type="text" id="contactInfo" placeholder="用于接收研报">
-                    </div>
-                    <div class="form-item">
-                        <label>公司阶段</label>
-                        <select id="compStage">
-                            <option value="seed">想法阶段/筹备中</option>
-                            <option value="angel">已注册/未融资</option>
-                            <option value="preA">已获早期融资</option>
-                        </select>
-                    </div>
-                    <div class="form-item full-width">
-                        <label>面临的紧急诉求或疑惑描述</label>
-                        <textarea id="issueDesc" rows="4" placeholder="例如：合伙人要退股怎么处理？有人仿冒我们的商标怎么办？"></textarea>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="alert('预约已接入 FounderLegal 企业合规序列，专业律师将尽快复核。')">一键申请专业复核</button>
-            </div>
-        </div>
-    </section>
-
+    <!-- 底部数据来源说明及法律免责声明 -->
     <footer class="main-footer">
         <div class="container footer-content">
             <div class="footer-info">
-                <p class="footer-logo">⚖️ FounderLegal 数字化工作台</p>
-                <p class="footer-desc">为创业者提供可量化的数字化合规风控模型。本站所有工具及案例内容仅供普法参考，不构成正式法律意见或执业律师的咨询结论。</p>
+                <p class="footer-logo">⚖️ FounderLegal 数字化法务底座</p>
+                <p class="footer-desc">本系统严禁对数据进行恶意碰撞，底层技术由多步提示词工程驱动。所有数据基于本地流式安全沙箱清算，确保初创企业商业秘密安全。</p>
             </div>
+            
+            <!-- 增加权威数据源公开栏 -->
+            <div class="datasource-footer-block">
+                <strong>🔗 数据连接器与底层核查依托：</strong>
+                <span>国家知识产权局商标检索系统 | 司法部官方法规数据库 | 北大法律信息中心法宝API | 最高人民法院人民法院案例库</span>
+            </div>
+
             <div class="footer-links">
                 <a href="javascript:void(0)" onclick="openLegalModal('disclaimer')">免责声明</a>
                 <span class="divider">|</span>
@@ -209,12 +171,12 @@
                 <a href="javascript:void(0)" onclick="openLegalModal('terms')">使用条款</a>
             </div>
             <div class="footer-copyright">
-                <p>© 2026 FounderLegal 数字化法务工作台. All rights reserved.</p>
-                <p style="font-size: 11px; margin-top: 4px; color: #64748B;">大学生普法数字化公益项目 | ICP备XXXXXXXX号</p>
+                <p>© 2026 FounderLegal 数字化法务工作台. 大学生普法数字化公益项目</p>
             </div>
         </div>
     </footer>
 
+    <!-- 通用法律弹窗系统 -->
     <div id="legalModal" class="legal-modal-overlay">
         <div class="legal-modal-box">
             <div class="legal-modal-header">
@@ -223,7 +185,7 @@
             </div>
             <div id="legalModalBody" class="legal-modal-body"></div>
             <div class="legal-modal-footer">
-                <button class="btn-confirm-modal" onclick="closeLegalModal()">我已阅读并知晓</button>
+                <button class="btn-confirm-modal" onclick="closeLegalModal()">我已阅读并知晓风险</button>
             </div>
         </div>
     </div>
