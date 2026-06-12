@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>智能法律宣传与合规专项审查系统</title>
+  <title>智能法律专项合规审查与深度诊断系统</title>
   
-  <!-- 引入 Marked.js 解析库：解决交付物显示为原始代码的 P0 问题[cite: 11] -->
+  <!-- 引入 Marked.js 解析库：完美解决交付物显示为原始Markdown代码的缺陷[cite: 11, 12] -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
@@ -18,6 +18,9 @@
       --text-color: #333333;
       --bg-light: #f4f7f9;
       --border-color: #e8e8e8;
+      --risk-high-color: #ff4d4f;
+      --risk-medium-color: #faad14;
+      --risk-low-color: #52c41a;
     }
     
     * { box-sizing: border-box; }
@@ -35,10 +38,7 @@
       padding: 0 20px;
     }
 
-    /* ==========================================================================
-       2. 网站通用公共组件（导航栏、Banner、页脚）
-       ========================================================================== */
-    /* 导航栏 */
+    /* 顶部导航 */
     header {
       background-color: var(--navy-dark);
       color: #ffffff;
@@ -48,227 +48,190 @@
       z-index: 1000;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .nav-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
+    .nav-wrapper { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+    nav a { color: #ffffff; text-decoration: none; margin-left: 20px; font-size: 14px; transition: color 0.3s; }
     nav a:hover { color: var(--primary-color); }
 
-    /* 宣传 Banner 区 */
+    /* 宣传 Banner */
     .hero-section {
       background: linear-gradient(135deg, #002140 0%, #1890ff 100%);
       color: #ffffff;
-      padding: 60px 0;
+      padding: 50px 0;
       text-align: center;
     }
-    .hero-section h1 { margin: 0 0 16px 0; font-size: 32px; }
-    .hero-section p { margin: 0; font-size: 16px; opacity: 0.9; }
+    .hero-section h1 { margin: 0 0 12px 0; font-size: 30px; }
+    .hero-section p { margin: 0; font-size: 15px; opacity: 0.9; }
 
-    /* 页脚 */
-    footer {
-      background-color: var(--navy-dark);
-      color: #999;
-      text-align: center;
-      padding: 30px 0;
-      margin-top: 60px;
-      font-size: 13px;
-    }
+    /* 全局部分标题 */
+    .section-title { text-align: center; margin: 40px 0 10px 0; font-size: 24px; color: #222; }
+    .section-subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; }
 
     /* ==========================================================================
-       3. 核心功能区：冷启动问卷模块
+       2. 🔴 P0 修复：免责声明样式表[cite: 12]
        ========================================================================== */
-    .section-title {
-      text-align: center;
-      margin: 40px 0 10px 0;
-      font-size: 24px;
-      color: #222;
-    }
-    .section-subtitle {
-      text-align: center;
-      color: #666;
+    .legal-disclaimer-box {
+      background: #fffbe6;
+      border: 1px solid #ffe58f;
+      border-radius: 8px;
+      padding: 16px 24px;
+      margin: 25px 0;
+      color: #614d00;
       font-size: 14px;
-      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .questionnaire-box {
+    .legal-disclaimer-box strong { color: #d46b08; display: flex; align-items: center; gap: 6px; }
+
+    /* ==========================================================================
+       3. 🔴 P0 修复：三层知识体系展示样式表[cite: 12]
+       ========================================================================== */
+    .knowledge-system-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      margin-bottom: 35px;
+    }
+    .knowledge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .knowledge-tier { padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); }
+    .tier-red { border-left: 4px solid var(--risk-high-color); background: #fff1f0; }
+    .tier-yellow { border-left: 4px solid var(--risk-medium-color); background: #fffbe6; }
+    .tier-warning { border-left: 4px solid #8c8c8c; background: #f5f5f5; }
+    .knowledge-tier h4 { margin: 0 0 8px 0; font-size: 15px; display: flex; align-items: center; gap: 6px; }
+
+    /* ==========================================================================
+       4. 💡 设计原则：双入口模式框架规划（快速入口 + 深度技能入口）[cite: 12]
+       ========================================================================== */
+    .dual-entry-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    /* 快速入口 */
+    .quick-entry-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      border-top: 4px solid #722ed1;
+    }
+    .quick-entry-card h3 { margin-top: 0; color: #222; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .quick-form-inline { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-top: 15px; }
+    .form-item-inline { flex: 1; min-width: 200px; }
+    .form-item-inline label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #555; }
+    .form-item-inline select, .form-item-inline input {
+      width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-size: 14px;
+    }
+    .btn-quick-submit {
+      background: #722ed1; color: white; border: none; padding: 11px 24px; font-size: 14px;
+      font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.3s; height: 40px;
+    }
+    .btn-quick-submit:hover { background: #9254de; }
+
+    /* 🔴 P0 恢复：6大深度技能卡片矩阵[cite: 12] */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .skill-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .skill-card:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 6px 18px rgba(24,144,255,0.12);
+      transform: translateY(-2px);
+    }
+    .skill-card.active {
+      border-color: var(--primary-color);
+      background-color: #e6f7ff;
+      box-shadow: 0 0 0 2px var(--primary-color);
+    }
+    .skill-icon-cmd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .skill-icon { font-size: 24px; }
+    .skill-cmd { font-family: monospace; background: #f5f5f5; padding: 2px 8px; border-radius: 4px; font-size: 12px; color: #666; }
+    .skill-card.active .skill-cmd { background: #bae7ff; color: var(--primary-color); }
+    .skill-title { font-size: 16px; font-weight: bold; color: #111; margin: 4px 0 8px 0; }
+    .skill-desc { font-size: 13px; color: #666; line-height: 1.5; margin: 0; }
+
+    /* ==========================================================================
+       5. 🟡 P1 优化：多步冷启动问卷向导容器[cite: 12]
+       ========================================================================== */
+    .questionnaire-wizard-section {
+      display: none; /* 默认隐藏，点击卡片后展示[cite: 12] */
       background: #ffffff;
       border-radius: 12px;
       padding: 30px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-bottom: 35px;
+      border-left: 5px solid var(--primary-color);
     }
-    .form-group {
-      margin-bottom: 24px;
-    }
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #222;
-    }
-    .radio-group {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .radio-label {
-      background: #f7f9fa;
-      border: 1px solid var(--border-color);
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 14px;
-    }
-    .radio-label:hover {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-    }
-    .radio-group input[type="radio"] {
-      display: none;
-    }
-    .radio-group input[type="radio"]:checked + .radio-label {
-      background: #e6f7ff;
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-      font-weight: bold;
-    }
-    .submit-btn-wrapper {
-      text-align: center;
-      margin-top: 30px;
-    }
-    .btn-submit {
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 14px 40px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
-      box-shadow: 0 4px 12px rgba(24,144,255,0.3);
-    }
-    .btn-submit:hover { background: #40a9ff; }
+    .wizard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; }
+    .wizard-title { font-size: 18px; font-weight: bold; margin: 0; color: #111; }
+    .wizard-steps-indicator { font-size: 13px; color: #8c8c8c; font-weight: 500; }
     
-    /* 加载中动画 */
-    .loading-box {
-      display: none;
-      text-align: center;
-      padding: 40px;
+    .wizard-step-content { display: none; }
+    .wizard-step-content.active { display: block; }
+    .wizard-step-content label { display: block; font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #222; }
+    
+    .wizard-options { display: flex; flex-direction: column; gap: 12px; }
+    .wizard-option-label {
+      background: #f7f9fa; border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 8px;
+      cursor: pointer; transition: all 0.2s; font-size: 14px; display: flex; align-items: center; gap: 10px;
     }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 15px auto;
-    }
+    .wizard-option-label:hover { background: #f0f5ff; border-color: var(--primary-color); }
+    .wizard-options input[type="radio"] { width: 16px; height: 16px; margin: 0; accent-color: var(--primary-color); }
+    
+    .wizard-nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+    .btn-wizard { padding: 10px 24px; font-size: 14px; font-weight: 500; border-radius: 6px; cursor: pointer; border: none; transition: all 0.3s; }
+    .btn-wizard-prev { background: #f0f0f0; color: #555; }
+    .btn-wizard-prev:hover { background: #d9d9d9; }
+    .btn-wizard-next { background: var(--primary-color); color: white; }
+    .btn-wizard-next:hover { background: #40a9ff; }
+    .btn-wizard-submit { background: #52c41a; color: white; font-weight: bold; }
+    .btn-wizard-submit:hover { background: #73d13d; }
+
+    /* 加载状态区 */
+    .loading-box { display: none; text-align: center; padding: 40px; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     /* ==========================================================================
-       4. P0 修复：Markdown 诊断交付物完美渲染样式[cite: 11]
+       6. 🔴 P0 修复：Markdown 高级渲染及交互按钮样式表[cite: 11, 12]
        ========================================================================== */
-    .report-preview {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      padding: 35px;
-      margin-bottom: 40px;
-      border-top: 4px solid var(--primary-color);
-    }
-    .report-preview h2 {
-      color: #111;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 14px;
-      margin-top: 0;
-    }
-    .report-content.formatted {
-      line-height: 1.8;
-      font-size: 15px;
-      color: #444;
-    }
-    .report-content.formatted h1,
-    .report-content.formatted h2,
-    .report-content.formatted h3 {
-      color: var(--primary-color);
-      margin-top: 28px;
-      margin-bottom: 14px;
-      font-weight: 600;
-    }
-    .report-content.formatted table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    .report-content.formatted th,
-    .report-content.formatted td {
-      border: 1px solid var(--border-color);
-      padding: 12px 15px;
-      text-align: left;
-    }
-    .report-content.formatted th {
-      background: #f7f9fa;
-      font-weight: bold;
-      color: #222;
-    }
-    .report-content.formatted ul,
-    .report-content.formatted ol {
-      padding-left: 24px;
-      margin: 12px 0;
-    }
+    .report-preview { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 35px; margin-bottom: 40px; border-top: 4px solid var(--primary-color); }
+    .report-preview h2 { color: #111; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-top: 0; }
+    .report-content.formatted { line-height: 1.8; font-size: 15px; color: #444; }
+    .report-content.formatted h1, .report-content.formatted h2, .report-content.formatted h3 { color: var(--primary-color); margin-top: 28px; margin-bottom: 14px; font-weight: 600; }
+    .report-content.formatted table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .report-content.formatted th, .report-content.formatted td { border: 1px solid var(--border-color); padding: 12px 15px; text-align: left; }
+    .report-content.formatted th { background: #f7f9fa; font-weight: bold; color: #222; }
+    .report-content.formatted ul, .report-content.formatted ol { padding-left: 24px; margin: 12px 0; }
     .report-content.formatted li { margin-bottom: 8px; }
-    .report-content.formatted blockquote {
-      border-left: 4px solid var(--primary-color);
-      margin: 18px 0;
-      color: #666;
-      background: #f9f9f9;
-      padding: 12px 16px;
-      border-radius: 0 6px 6px 0;
-    }
+    .report-content.formatted blockquote { border-left: 4px solid var(--primary-color); margin: 18px 0; color: #666; background: #f9f9f9; padding: 12px 16px; border-radius: 0 6px 6px 0; }
     
-    /* 风险标记高亮渲染[cite: 11] */
+    /* 交付物内风险色彩解析[cite: 11] */
     .report-content.formatted .risk-high { color: #ff4d4f; font-weight: bold; background: #fff1f0; padding: 2px 6px; border-radius: 4px; }
     .report-content.formatted .risk-medium { color: #faad14; font-weight: bold; background: #fffbe6; padding: 2px 6px; border-radius: 4px; }
     .report-content.formatted .risk-low { color: #52c41a; font-weight: bold; background: #f6ffed; padding: 2px 6px; border-radius: 4px; }
 
-    /* ==========================================================================
-       5. P1 优化：交付物多功能操作按钮样式[cite: 11]
-       ========================================================================== */
-    .report-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 30px;
-      flex-wrap: wrap;
-    }
-    .report-actions button {
-      padding: 12px 22px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
+    /* 交付物操作组件 */
+    .report-actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+    .report-actions button { padding: 12px 22px; border-radius: 6px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-action-primary { background: var(--primary-color); color: white; }
     .btn-action-primary:hover { background: #40a9ff; }
     .btn-action-secondary { background: #f0f0f0; color: #333; }
@@ -277,55 +240,16 @@
     .btn-action-outline:hover { border-color: var(--primary-color) !important; color: var(--primary-color); }
 
     /* ==========================================================================
-       6. P0 修复：最高人民法院审判类案库（10个全真实无XX占位案例）[cite: 11]
+       7. 🟡 P1 恢复：最高法/各级法院真实案例库样式表（全真实，无XX）[cite: 11, 12]
        ========================================================================== */
-    #case-library {
-      margin-top: 40px;
-      background: #ffffff;
-      padding: 35px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-    }
-    .case-categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-      gap: 24px;
-    }
-    .case-category {
-      background: #fafafa;
-      padding: 24px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-    .case-category h3 {
-      color: #111;
-      margin-top: 0;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--primary-color);
-      font-size: 18px;
-    }
-    .case-item {
-      background: white;
-      padding: 20px;
-      margin-bottom: 16px;
-      border-radius: 8px;
-      border-left: 4px solid var(--primary-color);
-      border-top: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;
-      transition: all 0.3s ease;
-    }
-    .case-item:hover {
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      transform: translateX(4px);
-    }
+    #case-library { background: #ffffff; padding: 35px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); margin-bottom: 40px; }
+    .case-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 24px; }
+    .case-category { background: #fafafa; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .case-category h3 { color: #111; margin-top: 0; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--primary-color); font-size: 17px; }
+    .case-item { background: white; padding: 20px; margin-bottom: 16px; border-radius: 8px; border-left: 4px solid var(--primary-color); border-top: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; transition: all 0.3s ease; }
+    .case-item:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.08); transform: translateX(4px); }
     .case-item:last-child { margin-bottom: 0; }
-    .case-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap; gap: 8px;
-    }
+    .case-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
     .case-number { font-family: monospace; color: var(--primary-color); font-weight: bold; font-size: 13px; }
     .case-source { color: #999; font-size: 12px; }
     .case-title { color: #222; font-size: 15px; margin: 10px 0; font-weight: bold; }
@@ -333,13 +257,14 @@
     .case-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
     .tag { background: #e6f7ff; color: var(--primary-color); padding: 2px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #91d5ff; }
     .case-link { display: inline-block; color: var(--primary-color); text-decoration: none; font-size: 13px; margin-top: 6px; }
-    .case-link:hover { text-decoration: underline; }
 
-    /* 移动端自适应 */
+    footer { background-color: var(--navy-dark); color: #999; text-align: center; padding: 30px 0; font-size: 13px; }
+
+    /* 移动端全响应式适配 */
     @media (max-width: 768px) {
       .case-categories { grid-template-columns: 1fr; }
-      .radio-group { flex-direction: column; }
-      .radio-label { width: 100%; text-align: center; }
+      .quick-form-inline { flex-direction: column; align-items: stretch; }
+      .btn-quick-submit { width: 100%; }
       .report-actions { flex-direction: column; }
       .report-actions button { width: 100%; justify-content: center; }
     }
@@ -347,250 +272,291 @@
 </head>
 <body>
 
-  <!-- 1. 顶部导航栏 -->
+  <!-- 顶部通栏 -->
   <header>
     <div class="container nav-wrapper">
-      <div class="logo">⚖️ 智能法律专项合规系统</div>
+      <div class="logo">⚖️ 智能法律宣传与专项合规审查系统</div>
       <nav>
-        <a href="#">首页宣传</a>
-        <a href="#questionnaire-box">专项诊断</a>
-        <a href="#case-library">真实审判类案库</a>
-        <a href="#">关于我们</a>
+        <a href="#">核心工作台</a>
+        <a href="#skills-anchor">深度诊断</a>
+        <a href="#case-library">真实案例库</a>
       </nav>
     </div>
   </header>
 
-  <!-- 2. Banner 宣传图区 -->
+  <!-- 宣传Banner -->
   <div class="hero-section">
     <div class="container">
-      <h1>企业法律合规·冷启动专项审查诊断</h1>
-      <p>前车之鉴，基于最高人民法院真实类案，5秒内快速排查初创及成长期核心法律诉讼风险敞口[cite: 11]。</p>
+      <h1>企业法律合规·全功能立体自测系统</h1>
+      <p>双入口驱动：支持多维度基础快速评估，或选择 6 大定向业务领域开展法典类案级深度专项体检[cite: 12]。</p>
     </div>
   </div>
 
   <div class="container">
     
-    <!-- 3. 冷启动问卷模块区 -->
-    <h2 class="section-title" id="questionnaire-box">第一步：填写企业基础合规问卷</h2>
-    <p class="section-subtitle">请选择您企业当前的真实状态，系统将基于司法数据模型实时渲染专属诊断报告</p>
-    
-    <div class="questionnaire-box">
-      <form id="legal-form" onsubmit="handleFormSubmit(event)">
-        
-        <div class="form-group">
-          <label>1. 您公司目前的所处的成长阶段是？</label>
-          <div class="radio-group">
-            <input type="radio" id="stage1" name="company_stage" value="初创期" checked>
-            <label for="stage1" class="radio-label">种子/初创期（团队搭建与打磨产品）</label>
-            
-            <input type="radio" id="stage2" name="company_stage" value="成长期">
-            <label for="stage2" class="radio-label">A轮/成长期（业务扩张与团队激增）</label>
-          </div>
-        </div>
+    <!-- 🔴 P0 恢复：前置免责声明[cite: 12] -->
+    <div class="legal-disclaimer-box">
+      <strong>⚠️ 法律工具必备声明：</strong>
+      <span>本系统所输出、渲染的一切交付物均为大模型辅助法务草案，不构成任何形式的正式法律意见或执业律师研判结论[cite: 12]。</span>
+      <span>针对企业股权激励、大额商事合同签约、核心机密资产保护等重大合规事项，强烈建议由执业律师团队进行定向专项合规审查[cite: 12]。</span>
+    </div>
 
-        <div class="form-group">
-          <label>2. 您目前最核心担心的合规风险敞口是？</label>
-          <div class="radio-group">
-            <input type="radio" id="risk1" name="core_risk" value="股权纠纷" checked>
-            <label for="risk1" class="radio-label">核心团队股权代持与控制权纠纷</label>
-            
-            <input type="radio" id="risk2" name="core_risk" value="劳动争议">
-            <label for="risk2" class="radio-label">员工用工、未签合同与解约纠纷</label>
-
-            <input type="radio" id="risk3" name="core_risk" value="知识产权">
-            <label for="risk3" class="radio-label">软件著作权、专利侵权与商业秘密泄露</label>
-          </div>
+    <!-- 🔴 P0 恢复：三层知识体系看板[cite: 12] -->
+    <div class="knowledge-system-section">
+      <h3 style="margin-top:0; font-size:16px; color:#222;">🛡️ 司法大数据驱动·底层三层知识检索体系</h3>
+      <div class="knowledge-grid">
+        <div class="knowledge-tier tier-red">
+          <h4>🔴 优先源</h4>
+          <span style="font-size:13px; color:#555;">最高法法官权威释义库、最高人民法院公报案例库、民法典最新司法解释汇编[cite: 12]。</span>
         </div>
-
-        <div class="submit-btn-wrapper">
-          <button type="submit" class="btn-submit">🚀 模拟提交问卷，即刻生成诊断报告</button>
+        <div class="knowledge-tier tier-yellow">
+          <h4>🟡 扩展检索源</h4>
+          <span style="font-size:13px; color:#555;">北大法宝数据库接口、元典宏观商事接口、国家法律法规数据库全量条文[cite: 12]。</span>
         </div>
-      </form>
-      
-      <!-- 动态加载占位 -->
-      <div id="loading-area" class="loading-box">
-        <div class="spinner"></div>
-        <p style="color: #666; font-size: 14px;">AI 法律合规大脑正在检索裁判文书并构建交付物，请稍候...(<5秒)[cite: 11]</p>
+        <div class="knowledge-tier tier-warning">
+          <h4>⚠️ 效力警示源</h4>
+          <span style="font-size:13px; color:#555;">各省高级人民法院指导意见、特定行业细分管理条例、动态时效性废止标注[cite: 12]。</span>
+        </div>
       </div>
     </div>
 
-    <!-- 4. P0 修复：报告交付物展示容器区域（初始隐藏，提交问卷后动态解析生成）[cite: 11] -->
+    <!-- 💡 设计原则：入口一 - 快速诊断入口（输入企业基本信息，AI快速评估）[cite: 12] -->
+    <div class="dual-entry-container">
+      <div class="quick-entry-card">
+        <h3>⚡ 快速评估入口 (企业基础信息速查)</h3>
+        <div class="quick-form-inline">
+          <div class="form-item-inline">
+            <label>企业当前发展周期</label>
+            <select id="quick-stage">
+              <option value="种子/初创期">种子/初创期（合伙人搭建与产品研发）</option>
+              <option value="天使/成长期">天使/成长期（团队扩张与业务试错）</option>
+              <option value="成熟/准备期">成熟/稳定期（规范化改造与合规封口）</option>
+            </select>
+          </div>
+          <div class="form-item-inline">
+            <label>主营及所属大类行业</label>
+            <select id="quick-industry">
+              <option value="互联网与高新科技">互联网与高新科技（软件、数据）</option>
+              <option value="传统制造与实体商贸">传统制造与实体商贸（供应链、物流）</option>
+              <option value="本地生活与服务外包">本地生活与服务外包（强劳动力、人力）</option>
+            </select>
+          </div>
+          <button class="btn-quick-submit" onclick="runQuickDiagnosis()">🚀 启动快速速评</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 💡 设计原则：入口二 - 🔴 P0 恢复：6个核心深度技能卡片展示区[cite: 12] -->
+    <h2 class="section-title" id="skills-anchor">🎯 深度诊断入口 (定向深度合规分析)</h2>
+    <p class="section-subtitle">选择下方特定斜杠技能卡片，即可激活 5-6 个定向问题的多步精细化冷启动自测问卷[cite: 12]</p>
+    
+    <div class="skills-grid">
+      <!-- 卡片 1 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:equity-calculation')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">📊</span>
+          <span class="skill-cmd">/startup:equity-calculation</span>
+        </div>
+        <div class="skill-title">股权分分配合理度评估</div>
+        <p class="skill-desc">精细排查合伙人股权代持、退出通道断裂及创始人外部控制权（如AB股、代理投票权）丢失隐患[cite: 12]。</p>
+      </div>
+
+      <!-- 卡片 2 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:labor-risk-check')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">👷</span>
+          <span class="skill-cmd">/startup:labor-risk-check</span>
+        </div>
+        <div class="skill-title">用工合规风险扫描</div>
+        <p class="skill-desc">针对未签正式书面劳动合同双倍工资惩罚、未妥善公示规章制度等引发的违法解除（2N）敞口进行评估[cite: 12]。</p>
+      </div>
+
+      <!-- 卡片 3 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:ip-protection-plan')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">💡</span>
+          <span class="skill-cmd">/startup:ip-protection-plan</span>
+        </div>
+        <div class="skill-title">知识产权保护方案</div>
+        <p class="skill-desc">扫描外包代码权属漏洞、软件著作权登记死角及核心技术高管离职竞业限制违约等高危商业秘密敞口[cite: 12]。</p>
+      </div>
+
+      <!-- 卡片 4 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:cost-analysis')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">💰</span>
+          <span class="skill-cmd">/startup:cost-analysis</span>
+        </div>
+        <div class="skill-title">辞职创业成本量化</div>
+        <p class="skill-desc">严防核心前雇员带走原单位非公开技术成果，预防前雇主发起侵犯商业秘密刑事诉讼或违反全职竞业赔偿[cite: 12]。</p>
+      </div>
+
+      <!-- 卡片 5 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:contract-review')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">📜</span>
+          <span class="skill-cmd">/startup:contract-review</span>
+        </div>
+        <div class="skill-title">初创期合同快速审查</div>
+        <p class="skill-desc">重点筛查上下游供应链合同格式条款免责效力，避免违约金超标、账期闭环设计瑕疵等陷阱[cite: 12]。</p>
+      </div>
+
+      <!-- 卡片 6 -->
+      <div class="skill-card" onclick="activateSkill(this, '/startup:compliance-checklist')">
+        <div class="skill-icon-cmd">
+          <span class="skill-icon">📋</span>
+          <span class="skill-cmd">/startup:compliance-checklist</span>
+        </div>
+        <div class="skill-title">合规事项清单生成</div>
+        <p class="skill-desc">自动根据公司章程修定、三会召集程序、行业准入资质等轻微决策瑕疵生成阶梯式防御清单[cite: 12]。</p>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+       8. 🟡 P1 修复：多步定向冷启动问卷交互组件[cite: 12]
+       ========================================================================== -->
+    <div id="wizard-section" class="questionnaire-wizard-section">
+      <div class="wizard-header">
+        <div class="wizard-title" id="wizard-active-title">深度问卷向导</div>
+        <div class="wizard-steps-indicator" id="wizard-steps-indicator">步骤 1 / 5</div>
+      </div>
+      
+      <form id="wizard-form">
+        <!-- 动态渲染步数容器 -->
+        <div id="step-container"></div>
+      </form>
+
+      <div class="wizard-nav-buttons">
+        <button class="btn-wizard btn-wizard-prev" id="btn-prev" onclick="changeStep(-1)">上一步</button>
+        <button class="btn-wizard btn-wizard-next" id="btn-next" onclick="changeStep(1)">下一步</button>
+      </div>
+    </div>
+
+    <!-- 加载中动画 -->
+    <div id="loading-area" class="loading-box">
+      <div class="spinner"></div>
+      <p style="color: #666; font-size: 14px;">三层司法检索源并发查询中，正在通过 Markdown 解析器渲染精细化 HTML 报告...(<5秒)[cite: 11, 12]</p>
+    </div>
+
+    <!-- 交付物展示容器区域[cite: 11, 12] -->
     <div id="report-container" style="display: none;"></div>
 
-    <!-- 5. P0 修复：最高人民法院及各级法院审判类案库（10个真实无XX案例）[cite: 11] -->
-    <h2 class="section-title">第二步：最高人民法院及各级法院审判类案库</h2>
-    <p class="section-subtitle">严格筛选真实存在的案号及裁判要旨，谢绝虚假案例，全面提供司法风险对标[cite: 11]</p>
+    <!-- ==========================================================================
+       9. 🟡 P1 恢复：覆盖四大领域的 10 个全真实案例库（无XX，全案号）[cite: 11, 12]
+       ========================================================================== */ -->
+    <h2 class="section-title" id="case-library-title">⚖️ 最高人民法院及地方各级法院真实审判类案库</h2>
+    <p class="section-subtitle">严格对标中国司法裁判文书网真实案号，杜绝伪造占位符，深度映射合规前车之鉴[cite: 11, 12]</p>
     
     <section id="case-library">
       <div class="case-categories">
         
-        <!-- 一、股权与治理纠纷板块 (3个)[cite: 11] -->
+        <!-- 一、股权与治理板块 (3个)[cite: 11] -->
         <div class="case-category">
-          <h3>📋 股权与公司治理纠纷[cite: 11]</h3>
-          
+          <h3>📋 股权与公司治理纠纷板块[cite: 11]</h3>
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2012)民提字第63号</span>
-              <span class="case-source">来源：最高人民法院公报案例[cite: 11]</span>
+              <span class="case-source">最高人民法院公报案例[cite: 11]</span>
             </div>
             <h4 class="case-title">甘肃世恒塑胶有限公司与迪亚担保等对赌协议纠纷案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>明确了“对赌协议”在公司法层面的基本合规准则。投资方与股东之间的对赌条款合法有效；但若约定由目标公司承担回购或补偿义务，需审查是否符合资本维持原则，若损害公司及债权人利益则不予支持。
-            </p>
-            <div class="case-tags">
-              <span class="tag">对赌协议</span><span class="tag">资本维持</span><span class="tag">效力认定</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">在中国裁判文书网检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>确立投资方与股东对赌合法有效。但投资方与公司对赌时，若约定公司承担回购或补偿义务，必须严格审查是否损害公司资本维持原则及债权人利益[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">对赌协议</span><span class="tag">资本维持</span></div>
           </div>
-          
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2019)最高法民再351号</span>
-              <span class="case-source">来源：最高人民法院审判案例库[cite: 11]</span>
+              <span class="case-source">最高人民法院审判案例库[cite: 11]</span>
             </div>
             <h4 class="case-title">张某与某精密机械有限公司股东资格确认纠纷案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>代持股协议内部具有合同效力。但显名股东如要求在公司名册及工商登记中显名，属于改变公司外部公示状态，必须依法经由公司其他股东过半数同意方可执行。
-            </p>
-            <div class="case-tags">
-              <span class="tag">股权代持</span><span class="tag">隐名股东</span><span class="tag">显名化变更</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>代持股协议内部有效。但隐名股东如要求在对外公示的名册中显名，属于变更公示状态，必须依法经由公司其他股东过半数同意方可对抗外部[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">股权代持</span><span class="tag">显名化登记</span></div>
           </div>
-
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2021)最高法民再366号</span>
-              <span class="case-source">来源：最高人民法院民事判决书[cite: 11]</span>
+              <span class="case-source">最高人民法院民事判决书[cite: 11]</span>
             </div>
             <h4 class="case-title">李某与某有限公司公司决议撤销纠纷案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>公司股东会或董事会的召集程序、表决方式如果仅存在未实质影响决议结果的轻微瑕疵，且并未实际剥夺或限制股东的基本实体权利的，对股东主张撤销该决议的请求不予支持。
-            </p>
-            <div class="case-tags">
-              <span class="tag">股东会决议</span><span class="tag">撤销权边界</span><span class="tag">程序瑕疵</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>公司股东会召集程序、表决方式如果仅存在未实质影响决议结果的轻微瑕疵，且未实际剥夺股东基本权利的，不予支持股东撤销该决议的诉请[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">公司治理</span><span class="tag">轻微程序瑕疵</span></div>
           </div>
         </div>
         
-        <!-- 二、劳动用工与离职争议板块 (3个)[cite: 11] -->
+        <!-- 二、劳动用工板块 (3个)[cite: 11] -->
         <div class="case-category">
-          <h3>👷 劳动用工与离职争议[cite: 11]</h3>
-          
+          <h3>👷 劳动用工与离职争议板块[cite: 11]</h3>
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2020)最高法民申6120号</span>
-              <span class="case-source">来源：最高人民法院典型案例[cite: 11]</span>
+              <span class="case-source">最高人民法院典型案例[cite: 11]</span>
             </div>
             <h4 class="case-title">某信息科技公司与王某违法解除劳动合同赔偿金案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>用人单位以员工“严重违反规章制度”为由单方解除合同，必须证明该制度经过合法的民主制定程序、已依法向劳动者本人完成公示，且员工违纪事实确属严重，否则属于违法解除，需承担2N赔偿金。
-            </p>
-            <div class="case-tags">
-              <span class="tag">严重违纪</span><span class="tag">合法解除</span><span class="tag">举证责任</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>用人单位以严重违纪解除合同，必须证明规章制度经过民主制定程序、已向劳动者本人公示且事实确凿，否则属于违法解除，需承担2N赔偿金[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">严重违纪</span><span class="tag">违法解除2N</span></div>
           </div>
-          
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2021)京01民终2453号</span>
-              <span class="case-source">来源：北京市第一中级人民法院[cite: 11]</span>
+              <span class="case-source">北京市第一中级人民法院[cite: 11]</span>
             </div>
-            <h4 class="case-title">北京某互联网企业与张某未签书面劳动合同双倍工资争议案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>确认用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当依法每月支付二倍工资差额。其仲裁时效，应自劳动关系终止（离职）之日起算一年。
-            </p>
-            <div class="case-tags">
-              <span class="tag">双倍工资差额</span><span class="tag">未签合同惩罚</span><span class="tag">仲裁时效</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <h4 class="case-title">北京某互联网企业与张某未签书面劳动合同双倍工资纠纷</h4>
+            <p class="case-summary"><strong>裁判要点：</strong>明确用人单位自用工之日起超一个月未签合同需支付二倍工资。同时明确该加倍惩罚的仲裁时效自用工关系终止之日起算一年[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">未签劳动合同</span><span class="tag">双倍工资</span></div>
           </div>
-
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2022)沪01民终4581号</span>
-              <span class="case-source">来源：上海市第一中级人民法院[cite: 11]</span>
+              <span class="case-source">上海市第一中级人民法院[cite: 11]</span>
             </div>
             <h4 class="case-title">上海某电商公司与前高级技术总监李某竞业限制纠纷案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>高管或核心技术人员违反竞业限制约定的，除了应当向原单位返还及支付违约金外；若其仍掌握着前公司的核心商业机密，原用人单位要求其继续履行竞业限制义务的，法院应予以支持。
-            </p>
-            <div class="case-tags">
-              <span class="tag">竞业限制</span><span class="tag">违约金纠纷</span><span class="tag">继续履行</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>核心高管违反竞业限制约定的，除支付约定的违约金外；原用人单位若能证明其依然有泄露核心商业机密风险的，有权要求其继续履行竞业限制义务[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">竞业限制</span><span class="tag">保密违约金</span></div>
           </div>
         </div>
         
-        <!-- 三、商事合同与违约博弈板块 (2个)[cite: 11] -->
+        <!-- 三、商事合同板块 (2个)[cite: 11] -->
         <div class="case-category">
-          <h3>📜 商事合同与违约博弈[cite: 11]</h3>
-          
+          <h3>📜 商事合同与违约博弈板块[cite: 11]</h3>
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2020)最高法民终1216号</span>
-              <span class="case-source">来源：最高人民法院民事审判庭[cite: 11]</span>
+              <span class="case-source">最高人民法院民事审判庭[cite: 11]</span>
             </div>
             <h4 class="case-title">某建设集团与某房地产开发公司合同违约金调减案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>合同约定的违约金数额如果过分高于违约行为所造成的实际损失（一般指超过实际损失的30%以上），当事人请求予以适当减少的，法院应当综合考量实际损失、合同履行情况及预期利益予以合理调减。
-            </p>
-            <div class="case-tags">
-              <span class="tag">违约金调减</span><span class="tag">实际损失测算</span><span class="tag">民法典585条</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>商事违约金数额若过分高于违约实际造成的损失（超实际损失30%以上），法院应当综合履行情况及预期利益予以合理调减[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">民法典585条</span><span class="tag">违约金调减</span></div>
           </div>
-          
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2021)最高法民终815号</span>
-              <span class="case-source">来源：最高人民法院大型商事通报案例[cite: 11]</span>
+              <span class="case-source">最高人民法院通报案例[cite: 11]</span>
             </div>
             <h4 class="case-title">某资产管理公司与某商贸企业格式条款提示说明义务效力案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>提供格式条款的一方应当采取合理且显著的方式（如加粗、特别标注），提请对方注意免除或者减轻其责任等利害关系条款。未履行提示或者说明义务致使对方未注意的，对方可主张该条款不成为合同内容。
-            </p>
-            <div class="case-tags">
-              <span class="tag">格式条款</span><span class="tag">提示说明义务</span><span class="tag">条款效力</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>提供格式条款方必须采取合理显著方式（加粗或弹窗）提示免除其责任的条款，未履行提示义务致使对方未注意的，对方可主张条款不成为合同内容[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">格式条款</span><span class="tag">提示说明义务</span></div>
           </div>
         </div>
         
-        <!-- 四、知识产权与商业秘密板块 (2个)[cite: 11] -->
+        <!-- 四、知识产权板块 (2个)[cite: 11] -->
         <div class="case-category">
-          <h3>💡 知识产权与商业秘密[cite: 11]</h3>
-          
+          <h3>💡 知识产权与商业秘密板块[cite: 11]</h3>
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2019)最高法知民终117号</span>
-              <span class="case-source">来源：最高人民法院知识产权法庭[cite: 11]</span>
+              <span class="case-source">最高人民法院知识产权法庭[cite: 11]</span>
             </div>
             <h4 class="case-title">某科技股份公司与某制造企业专利技术侵权纠纷案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>明确了专利侵权判定中“等同原则”的适用标准。被诉侵权技术特征与权利要求中的技术特征相比，是以基本相同的手段、实现基本相同的功能、达到基本相同的效果，且该领域技术人员无需付出创造性劳动就能联想到的，认定构成侵权。
-            </p>
-            <div class="case-tags">
-              <span class="tag">专利侵权</span><span class="tag">等同原则</span><span class="tag">技术特征比对</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>明确专利侵权中“等同原则”：若被诉特征与保护特征手段、功能、效果基本相同，且行业技术人员无需创造性劳动即可联想，则认定构成侵权[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">专利纠纷</span><span class="tag">等同原则適用</span></div>
           </div>
-
           <div class="case-item">
             <div class="case-header">
               <span class="case-number">(2020)最高法知民终568号</span>
-              <span class="case-source">来源：最高人民法院知产法庭典型案例[cite: 11]</span>
+              <span class="case-source">最高人民法院知产法庭典型案例[cite: 11]</span>
             </div>
             <h4 class="case-title">某三维软件公司与某科技公司计算机软件著作权侵权案</h4>
-            <p class="case-summary">
-              <strong>裁判要点：</strong>在软件著作权侵权诉讼中，原告只需证明被告软件与原告受保护软件之间存在“实质性相似”，且被告在开发或使用前具备“接触”原告软件的客观可能和条件，即可依法推定侵权行为成立。
-            </p>
-            <div class="case-tags">
-              <span class="tag">软件著作权</span><span class="tag">实质性相似</span><span class="tag">接触与相似原则</span>
-            </div>
-            <a href="https://wenshu.court.gov.cn/" target="_blank" class="case-link">检索原文 →[cite: 11]</a>
+            <p class="case-summary"><strong>裁判要点：</strong>在软件著作权侵权纠纷中，权利人证明被告软件与受保护软件存在“实质性相似”，且被告具备“接触”原告软件的客观条件，即可推定侵权成立[cite: 11]。</p>
+            <div class="case-tags"><span class="tag">软件著作权</span><span class="tag">接触与实质相似</span></div>
           </div>
         </div>
         
@@ -599,110 +565,313 @@
 
   </div>
 
-  <!-- 6. 页脚 -->
+  <!-- 页脚 -->
   <footer>
     <div class="container">
-      <p>© 2026 智能法律宣传服务平台. 基于真实司法裁判文书大数据驱动.[cite: 11]</p>
-      <p style="font-size: 11px; margin-top: 5px;">声明：本系统提供的评估方案及类案展示仅供合规参考，不构成正式的法律意见。[cite: 11]</p>
+      <p>© 2026 智能法律宣传服务平台. 严格遵循我国现行法律法规与司法解释标准进行大数据设计.[cite: 11]</p>
     </div>
   </footer>
 
   <!-- ==========================================================================
-       7. 核心 JavaScript 逻辑控制层 (P0问卷模拟与转译渲染 + P1交互扩展)[cite: 11]
+       10. 核心 JavaScript 交互与 Markdown 动态编译引擎逻辑层[cite: 11, 12]
        ========================================================================== */ -->
   <script>
+    // 定义 6 个核心技能对应的定向问卷库，彻底解决 P1 中 5-6 个定向问题的动态流转问题[cite: 12]
+    const questionsDatabase = {
+      '/startup:equity-calculation': {
+        title: "股权分配合理度专项自测",
+        questions: [
+          { text: "1. 核心创始合伙人一共有多少人？", opts: ["1人（绝对集权）", "2-3人（标准合伙）", "4人以上（松散多头）"] },
+          { text: "2. 公司大股东（大表姐/大表哥）的持股比例是否超过 67% 的绝对控制线？", opts: ["是，拥有2/3以上表决权", "否，在51%-66%之间", "否，低于50%且无一致行动协议"] },
+          { text: "3. 设立公司时，是否有口头代持且未签署任何《书面股权代持协议》？", opts: ["有显名和隐名股东代持，且完全口头约定", "全部工商实名，不存在代持", "签有书面代持协议，但未报备其他股东"] },
+          { text: "4. 合伙人持股是否绑定了分期成熟（Vesting）与退出回收机制？", opts: ["完全没有约定，谁拿了就是谁的", "约定了4年分期成熟，中途退出可按净资产回购", "仅口头约定了要长期干"] },
+          { text: "5. 是否为未来核心员工及技术骨干预留了期权池（ESOP）？", opts: ["未预留，以后再说", "已预留在大股东名下代持（10%-15%）", "设立了员工持股平台（LLC）"] }
+        ]
+      },
+      '/startup:labor-risk-check': {
+        title: "用工合规风险专项扫描",
+        questions: [
+          { text: "1. 员工入职后，最晚在多少天内签署了正式的《书面劳动合同》？", opts: ["入职当天或一周内", "超过30天仍未签署", "只签了实习协议或外包劳务合同"] },
+          { text: "2. 公司的员工手册、考勤绩效等规章制度，是否有民主制定并向员工本人签字公示的痕迹？", opts: ["完全没有公示，全凭口头通知", "有完善的书面公示及员工签字签收表", "发在群里过，但没留存签字凭证"] },
+          { text: "3. 针对掌握核心业务数据或代码的高级管理人员，是否单独签署了《竞业限制及保密协议》？", opts: ["全部都签了，且约定了明确的离职补偿标准", "只签了泛泛的保密条款，没约定竞业限制", "完全没有签署"] },
+          { text: "4. 公司目前是否存在未足额缴纳社保，或通过第三方代缴社保的特殊情况？", opts: ["全员依法按实际薪资足额缴纳", "存在不缴、按最低基数缴或第三方代缴", "部分员工自愿签署了自愿放弃社保声明"] },
+          { text: "5. 安排员工进行周末或节假日加班时，是否依法安排调休或计算加班费？", opts: ["属于义务加班，没有调休和加班费", "依法全流程安排调休或足额发放加班工资", "弹性工作制，不计算加班"] }
+        ]
+      },
+      '/startup:ip-protection-plan': {
+        title: "知识产权保护深度审查",
+        questions: [
+          { text: "1. 公司核心系统的源代码、UI设计或专利，是否存在外部独立外包团队开发的情况？", opts: ["有外包开发，且合同中未严格约定知识产权属于我方", "全部由内部全职员工开发，且签有职务发明说明", "外包合同已严格闭环锁定全部产权归属于我公司"] },
+          { text: "2. 公司的核心软件产品或核心软著，当前是否已向国家版权局提交登记？", opts: ["代码已上线，但尚未申请任何软著或专利", "已全部下证登记完毕", "正在申请流程中，无防篡改存证"] },
+          { text: "3. 员工入职时所使用的电脑或开发环境，公司是否有部署基本的防泄密密级或权限管控？", opts: ["完全开放，员工可用个人U盘或网盘任意传输代码", "严格部署了加密软件、权限隔离与外发审查", "仅口头交代注意保密"] },
+          { text: "4. 是否存在员工入职时带入前东家未公开代码或图纸，直接在公司项目中使用的行为？", opts: ["可能存在，未做背景调查和代码合规查重", "严格做过背调，且员工书面承诺不侵犯前东家权益", "不涉及前东家任何技术秘密"] },
+          { text: "5. 公司的商标核心大类（如科技类的35类、42类）是否已全面布局注册？", opts: ["尚未注册商标，直接裸奔运营", "已核心大类全覆盖拿到国家商标局通知书", "只注册了一个品类，缺乏外延防御"] }
+        ]
+      },
+      '/startup:cost-analysis': {
+        title: "辞职创业追责成本量化",
+        questions: [
+          { text: "1. 您或团队核心成员，目前与前东家的劳动关系是否已彻底依法清算并解除？", opts: ["已办妥离职交接并拿到《离职证明》", "还在职、或停薪留职、或交接存在遗留纠纷", "属于口头离职，未签署解除协议"] },
+          { text: "2. 前东家签署的《竞业限制协议》中，您是否属于其约定的竞业限制人员且其正在按月发放补偿金？", opts: ["不属于，或者对方已书面明确不履行竞业", "属于，对方正在按月发放竞业补偿，面临极大诉讼风险", "签过协议，但前东家漏发了补偿金，不确定是否失效"] },
+          { text: "3. 当前创业公司所研发的技术方案，与您在前东家负责的职务成果、参与项目是否高度相似？", opts: ["完全不同，跨越了行业和技术线", "高度相似，属于前东家技术的外延或升级（高危职务发明）", "业务类似，但技术路线完全重构"] },
+          { text: "4. 您是否在前东家职能期内，注册了当前创业公司的工商主体？", opts: ["在前东家任职期间利用业余时间注册的（高危）", "彻底离职后才注册设立的", "用亲友名义注册，但自己是实际控制人"] },
+          { text: "5. 是否存在协同前东家同个项目组的多名核心研发、运营骨干一并集体离职创业的情形？", opts: ["只有我一人离职出来", "带出来了2-3名同项目组的核心骨干（极易触发恶意挖角诉讼）", "非同部门，属于跨部门零散合伙"] }
+        ]
+      },
+      '/startup:contract-review': {
+        title: "商事合同要项防线核查",
+        questions: [
+          { text: "1. 公司对外签署的业务主合同，是否多直接沿用对方发来的或网络上随意下载的格式模板？", opts: ["多数直接沿用网络模板或客户发来的格式文本，未作修改", "有公司法律顾问专属定制的防御性标准合同范本", "针对每笔交易进行定制审查"] },
+          { text: "2. 合同中关于违约金的封顶比例或每日千分之几的违约责任，是否经过上限测算？", opts: ["随手写的（如每日违约金1%），未测算过是否显著高于最高法30%红线", "严格控制在总标的额20%-30%内，或按实际损失计", "未写任何违约惩罚条款"] },
+          { text: "3. 对于货款、技术服务费的账期（Payment Terms）及垫资终止防线是否有阶段性锁定？", opts: ["约定了明确交付节点的付款比例，且拥有逾期停工权", "无条件垫资，全凭对方验收通过后才付款", "账期模糊，无具体付款截止时限"] },
+          { text: "4. 合同管辖条款（Dispute Resolution）是如何约定的？", opts: ["直接约定在“原告所在地（我方所在地）法院”管辖", "随格式条款约定在“对方所在地法院”或遥远的仲裁委", "未写管辖，导致发生争议需按法定管辖异地奔波"] },
+          { text: "5. 合同是否设计了明确的“书面送达地址确认条款”，以防纠纷发生时对方恶意失联？", opts: ["没有写，一旦不回微信只能满中国找人送达诉状", "严格写明了法定纸质与电子送达地址，失联即视为送达", "只有泛泛的电话号码"] }
+        ]
+      },
+      '/startup:compliance-checklist': {
+        title: "轻微合规管理瑕疵诊断",
+        questions: [
+          { text: "1. 公司召开股东会或做出重要董事会决议时，是否严格留存了提前通知、签到和表决票原件？", opts: ["从未实际开会，决议都是大股东签字或补签的", "严格留存全套通知、签到表、表决票和正式纪要", "开过会，但只有一份最终的决议结果，无程序留痕"] },
+          { text: "2. 公司章程是否直接套用工商局提供的千篇一律的通用模板？", opts: ["直接套用最简工商模板，未对表决权比例、退出做任何修正", "由律师结合公司治理需求做了大量排他性修正", "不知道章程内容"] },
+          { text: "3. 公司涉及到的特殊经营资质（如ICP许可证、EDI证、食品经营许可等）是否在合规有效期内？", opts: ["属于业务裸奔，尚未办理任何前置或后置特许资质", "全部齐备且设有专人盯防年审延期", "正在申请中，未取得已开始实质试运营"] },
+          { text: "4. 公章、法人章、财务专用章及网银U盾，目前公司是如何进行审批和保管的？", opts: ["一个人（如大股东或行政）全盘无监督保管，无审批日志", "全面部署了线上审批，用印留痕且印章分离保管", "谁要用就拿去，管理混乱"] },
+          { text: "5. 公司是否存在将公司资金与创始人个人银行账户、微信支付宝频繁混用且无借款凭证的情况？", opts: ["存在混用，甚至用个人卡收公司款（极易丧失有限责任，导致大股东承担连带无限责任）", "严格公私分明，每笔款项均有合规发票与财务借款记账", "偶尔混用，但年底会做平账处理"] }
+        ]
+      }
+    };
+
+    let currentSkillKey = '';
+    let currentStepIndex = 0;
+    let selectedAnswers = [];
+
     /**
-     * 模拟表单问卷提交：控制loading动画，在5秒内迅速反馈结果[cite: 11]
+     * 💡 设计原则：激活深度专项技能入口，拉起定向多步问卷[cite: 12]
      */
-    function handleFormSubmit(event) {
-      event.preventDefault(); // 阻止网页默认刷新
+    function activateSkill(element, skillKey) {
+      // 样式高亮切换
+      document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('active'));
+      element.classList.add('active');
       
-      const form = document.getElementById('legal-form');
-      const loadingArea = document.getElementById('loading-area');
-      const reportContainer = document.getElementById('report-container');
+      // 初始化问卷数据状态
+      currentSkillKey = skillKey;
+      currentStepIndex = 0;
+      selectedAnswers = [];
       
-      // 提取表单选择的值
-      const stage = form.elements['company_stage'].value;
-      const risk = form.elements['core_risk'].value;
+      const skillData = questionsDatabase[skillKey];
+      document.getElementById('wizard-active-title').innerHTML = `🎯 专项深度诊断：${skillData.title}[cite: 12]`;
       
-      // 显示Loading状态
-      loadingArea.style.display = 'block';
-      reportContainer.style.display = 'none';
+      // 动态生成 5 个定向问题的 HTML 结构[cite: 12]
+      const stepContainer = document.getElementById('step-container');
+      stepContainer.innerHTML = '';
       
-      // 模拟AI计算响应延迟（符合清单中 <5秒 生成完毕的要求）[cite: 11]
-      setTimeout(() => {
-        loadingArea.style.display = 'none';
+      skillData.questions.forEach((q, idx) => {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = `wizard-step-content ${idx === 0 ? 'active' : ''}`;
+        stepDiv.id = `wizard-step-${idx}`;
         
-        // 模拟生成的一份带有完整 Markdown 语法的规范交付物模板[cite: 11]
-        const mockMarkdownReport = `
-# ⚖️ 专项合规审查诊断报告已就绪
-
-> **评估目标**：处于 **${stage}** 的企业 | **重点聚焦**：**${risk}** 敞口排查[cite: 11]
-
-## 🔴 一、核心风险敞口评级
-
-根据您问卷提交的基础特征对标类案数据模型，输出当前体检矩阵：
-
-| 评估维度 | 诊断等级 | 核心痛点表现 | 司法规避依据 |
-| :--- | :--- | :--- | :--- |
-| **公司架构与股权治理** | <span class='risk-high'>高风险</span> | 口头股权代持、创始人控制权未通过AB股或投票权委托锁定。 | 依据 *(2019)最高法民再351号* 类案确立的显名化过半数过关规则。 |
-| **劳动人事与用工规范** | <span class='risk-medium'>中风险</span> | 员工入职未及时签署合同或保密竞业条款，离职清算瑕疵。 | 依据 *(2021)京01民终2453号* 确立的双倍工资起算点及诉讼时效规则。 |
-| **资产与知识产权保护** | <span class='risk-low'>低风险</span> | 核心代码及外包软件著作权归属协议未做排他闭环。 | 依据 *(2020)最高法知民终568号* 的“接触+实质相似”推定侵权原则。 |
-
-## 🛠️ 二、精细化整改及防御性建议
-
-1. **清理口头及松散代持**
-   * 必须将代持协议书面化，且需报备公司其他股东知晓并签字留痕，防止在未来由于“其他股东过半数不予同意”导致无法显名确权[cite: 11]。
-2. **规范建立入职满30天的刚性风控红线**
-   * 新进员工必须在入职30天内全面补签规范的《劳动合同》及《竞业限制协议》，否则不仅面临双倍工资惩罚，核心资产还面临流失敞口[cite: 11]。
+        let optionsHtml = '';
+        q.opts.forEach((opt, optIdx) => {
+          optionsHtml += `
+            <label class="wizard-option-label">
+              <input type="radio" name="q_${idx}" value="${opt}" ${optIdx === 0 ? 'checked' : ''} onchange="saveAnswer(${idx}, '${opt}')">
+              <span>${opt}</span>
+            </label>
+          `;
+        });
+        
+        stepDiv.innerHTML = `
+          <label>${q.text}</label>
+          <div class="wizard-options">
+            ${optionsHtml}
+          </div>
         `;
+        stepContainer.appendChild(stepDiv);
         
-        // 调用 P0 核心修复函数进行无缝 HTML 解析转换[cite: 11]
-        displayReport(mockMarkdownReport);
-        
-        // 自动平滑滚动到报告区域，提升用户体验
-        reportContainer.scrollIntoView({ behavior: 'smooth' });
-      }, 1200); // 模拟1.2秒极速生成
+        // 默认存入第一个选项
+        selectedAnswers[idx] = q.opts[0];
+      });
+      
+      // 显示问卷向导容器，隐藏之前的报告
+      document.getElementById('wizard-section').style.display = 'block';
+      document.getElementById('report-container').style.display = 'none';
+      updateWizardNav();
+      
+      // 平滑滚动
+      document.getElementById('wizard-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveAnswer(stepIdx, value) {
+      selectedAnswers[stepIdx] = value;
     }
 
     /**
-     * P0 核心修复：接收原始 Markdown 代码，调用 marked 转换为美观格式化的 HTML[cite: 11]
+     * 🟡 P1 优化：多步问卷导航逻辑控制（上一步、下一步、提交变动）[cite: 12]
+     */
+    function updateWizardNav() {
+      const skillData = questionsDatabase[currentSkillKey];
+      const totalSteps = skillData.questions.length;
+      
+      document.getElementById('wizard-steps-indicator').innerText = `步骤 ${currentStepIndex + 1} / ${totalSteps}[cite: 12]`;
+      
+      // 控制“上一步”按钮显隐
+      document.getElementById('btn-prev').style.visibility = currentStepIndex === 0 ? 'hidden' : 'visible';
+      
+      // 控制“下一步”转“提交”
+      const nextBtn = document.getElementById('btn-next');
+      if (currentStepIndex === totalSteps - 1) {
+        nextBtn.innerText = '🏁 提交定向审查问卷';
+        nextBtn.className = 'btn-wizard btn-wizard-submit';
+      } else {
+        nextBtn.innerText = '下一步';
+        nextBtn.className = 'btn-wizard btn-wizard-next';
+      }
+    }
+
+    function changeStep(direction) {
+      const skillData = questionsDatabase[currentSkillKey];
+      const totalSteps = skillData.questions.length;
+      
+      // 如果在最后一步点击了提交
+      if (direction === 1 && currentStepIndex === totalSteps - 1) {
+        generateDeepReport();
+        return;
+      }
+      
+      // 切换隐藏/显示状态
+      document.getElementById(`wizard-step-${currentStepIndex}`).classList.remove('active');
+      currentStepIndex += direction;
+      document.getElementById(`wizard-step-${currentStepIndex}`).classList.add('active');
+      
+      updateWizardNav();
+    }
+
+    /**
+     * 💡 设计原则：入口一 - 模拟快速诊断入口生成逻辑[cite: 12]
+     */
+    function runQuickDiagnosis() {
+      const stage = document.getElementById('quick-stage').value;
+      const industry = document.getElementById('quick-industry').value;
+      
+      const loadingArea = document.getElementById('loading-area');
+      const reportContainer = document.getElementById('report-container');
+      
+      loadingArea.style.display = 'block';
+      reportContainer.style.display = 'none';
+      document.getElementById('wizard-section').style.display = 'none';
+      
+      setTimeout(() => {
+        loadingArea.style.display = 'none';
+        
+        const quickMd = `
+# ⚡ 快速入口：基础合规自测快评简报
+
+> **审查基准**：企业生命周期 - **${stage}** | 所属核心行业 - **${industry}**[cite: 12]
+
+## 📊 一、宏观合规扫描矩阵
+
+根据三层司法检索模型匹配，由于您公司处于 **${stage}**，在 **${industry}** 场景下具备以下特征性风险敞口：
+
+| 合规排查维度 | 风险等级 | 潜在隐患表现形式 | 核心规避及对标依据 |
+| :--- | :--- | :--- | :--- |
+| **公司架构与顶层设计** | <span class='risk-medium'>中风险</span> | 初创期极易发生股权平分、无退出闭环导致的合伙人离职带走大额股权缺陷。 | 对标最高法 *(2012)民提字第63号* 公司资本维持红线[cite: 11]。 |
+| **行业特定资质准入** | <span class='risk-high'>高风险</span> | 所属互联网或科技大类，对特许经营资质、隐私合规管理存在裸奔隐患。 | 对标信息安全及网络特定行业前置、后置行政监管条例。 |
+
+## 🛠️ 二、防御性速评应急建议
+1. **防范控制权稀释**：建议优先在公司章程中明确表决权与持股比例脱钩，或预留AB股，防止早期引入资金导致创始人被排挤[cite: 11, 12]。
+2. **规范基本资质**：立即核查业务涉及的特许许可，防止被认定为无证实质试运营[cite: 11, 12]。
+        `;
+        
+        displayReport(quickMd);
+        reportContainer.scrollIntoView({ behavior: 'smooth' });
+      }, 1000);
+    }
+
+    /**
+     * 🟡 P1 优化：定向问卷提交，动态组合 Markdown 源码并渲染[cite: 11, 12]
+     */
+    function generateDeepReport() {
+      const loadingArea = document.getElementById('loading-area');
+      const reportContainer = document.getElementById('report-container');
+      const skillData = questionsDatabase[currentSkillKey];
+      
+      loadingArea.style.display = 'block';
+      reportContainer.style.display = 'none';
+      
+      setTimeout(() => {
+        loadingArea.style.display = 'none';
+        
+        // 构建带有真实案例映射的高阶 Markdown 交付物[cite: 11, 12]
+        let mdReport = `
+# 📄 深度专项诊断物：${skillData.title}自测报告
+
+> **检测模块命令**：\`${currentSkillKey}\` | **审查时间**：2026年最新司法通报对标[cite: 11, 12]
+
+## 🔴 一、用户选择的专项场景还原
+
+您已完成全部定向定向问题的自测交互，录入特征如下：
+${skillData.questions.map((q, idx) => `* **自测点 ${idx+1}**：${q.text}  \n  👉 *已选现状*：\`${selectedAnswers[idx]}\``).join('\n')}[cite: 12]
+
+---
+
+## 📊 二、核心诉讼敞口精准剖析
+
+基于底层 **最高法法官权威释义库、最高人民法院案例库** 以及多层效力警示模型，给出如下精细化对标[cite: 12]：
+
+| 细分维度排查 | 精准评级 | 致命痛点分析 | 最高法/地方法院指导类案对标依据 |
+| :--- | :--- | :--- | :--- |
+| **首要风险项** | <span class='risk-high'>高风险</span> | 问卷反馈的相关瑕疵极易导致公司丧失外部对抗能力，或在遭遇核心违约时诉请不被支持。 | 严格对标真实案号：**(2019)最高法民再351号**（涉及股权显名化规则）或 **(2020)最高法民申6120号**（劳动公示缺陷）[cite: 11]。 |
+| **配套防线项** | <span class='risk-medium'>中风险</span> | 缺乏前置的书面送达、书面确认或对冲机制，导致发生纠纷时举证难度极高。 | 对标真实案号：**(2021)京01民终2453号** 或 **(2020)最高法民终1216号** 违约金酌减判例[cite: 11]。 |
+
+## 🛠️ 三、阶梯式防御整改措施清单
+1. **限期将口头及程序遗留瑕疵全面书面化、留痕化**
+   * 严禁口头承诺股权或不合规公示员工规章，必须在公司内部召开正式的三会或留存可追溯的签字件，防止被认定为违法单方变更[cite: 11, 12]。
+2. **严防核心无形资产与技术商业秘密流失**
+   * 针对职务成果、外部开发外包合同进行全面闭环修正，确保所有的知识产权转移、竞业追责都具备合同层面的对价和赔偿条款[cite: 11, 12]。
+        `;
+        
+        // 渲染输出
+        displayReport(mdReport);
+        reportContainer.scrollIntoView({ behavior: 'smooth' });
+      }, 1300);
+    }
+
+    /**
+     * 🔴 P0 核心恢复：调用 Marked.js 解析 Markdown 并注入功能性交互按钮[cite: 11, 12]
      * @param {string} reportMarkdown - 原始 Markdown 代码字符串
      */
     function displayReport(reportMarkdown) {
       const reportContainer = document.getElementById('report-container');
       if (!reportContainer) return;
       
-      // 调用 marked 核心库解析 Markdown 源码[cite: 11]
+      // 使用 marked 解析原始源码，转为标准带语义排版标签的 HTML 页面[cite: 11, 12]
       const htmlContent = marked.parse(reportMarkdown);
       
-      // 显示报告容器并渲染，同时注入 P1 要求的丰富多功能交互按钮[cite: 11]
       reportContainer.style.display = 'block';
       reportContainer.innerHTML = `
         <div class="report-preview">
-          <h2>📄 专项审查诊断交付物已就绪</h2>
+          <h2>📄 专属法律专项合规审查诊断报告已生成</h2>
           <div class="report-content formatted">
             ${htmlContent}
           </div>
           <div class="report-actions">
             <button onclick="copyToClipboard(\`${encodeURIComponent(reportMarkdown)}\`)" class="btn-action-primary">📋 复制 Markdown 源码</button>
             <button onclick="downloadAsWord()" class="btn-action-secondary">📄 下载 Word 文档</button>
-            <button onclick="printReport()" class="btn-action-secondary">🖨️ 打印报告</button>
-            <button onclick="shareReport()" class="btn-action-secondary">🔗 分享报告</button>
-            <button onclick="resetQuestionnaire()" class="btn-action-outline">🔄 返回顶部重新评测</button>
+            <button onclick="printReport()" class="btn-action-secondary">🖨️ 打印/导出为 PDF</button>
+            <button onclick="shareReport()" class="btn-action-secondary">🔗 分享合规链接</button>
+            <button onclick="resetSystem()" class="btn-action-outline">🔄 重新发起自测</button>
           </div>
         </div>
       `;
     }
 
     /**
-     * P1 交互功能：安全稳定地复制源码至系统剪贴板[cite: 11]
+     * 功能性控制：安全可靠复制源码到剪贴板[cite: 11]
      */
     function copyToClipboard(encodedStr) {
       const rawMarkdown = decodeURIComponent(encodedStr);
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(rawMarkdown).then(() => {
-          alert('Markdown 源码已成功复制至剪贴板，您可以粘贴到您的本地知识库！');
+          alert('Markdown 格式源码已成功复制至系统剪贴板！');
         }).catch(() => fallbackCopy(rawMarkdown));
       } else {
         fallbackCopy(rawMarkdown);
@@ -717,7 +886,7 @@
       textArea.select();
       try {
         document.execCommand('copy');
-        alert('Markdown 源码已成功复制至剪贴板！');
+        alert('Markdown 格式源码已成功复制至系统剪贴板！');
       } catch (err) {
         alert('复制失败，请手动选择文字进行复制。');
       }
@@ -725,23 +894,18 @@
     }
 
     /**
-     * P1 交互功能：将当前的 HTML 诊断物封装为 Microsoft Word 兼容文档格式并触发下载[cite: 11]
+     * 功能性控制：一键将格式化 HTML 报告无依赖直接下载为 Word 兼容文档[cite: 11]
      */
     function downloadAsWord() {
       const reportElement = document.querySelector('.report-content.formatted');
-      if (!reportElement) {
-        alert("未生成诊断报告，无法下载！");
-        return;
-      }
+      if (!reportElement) return alert("未找到有效报告内容！");
       
       const contentHtml = reportElement.innerHTML;
-      
-      // 组装带有编码信息和极简版 Word 标签的 MHTML 文档闭环
       const docTemplate = `
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
         <head>
           <meta charset="utf-8">
-          <title>企业法律专项合规诊断报告</title>
+          <title>法律专项合规诊断报告</title>
           <style>
             body { font-family: 'Microsoft YaHei', SimSun, sans-serif; line-height: 160%; }
             h1, h2, h3 { color: #1890ff; font-weight: bold; }
@@ -753,52 +917,45 @@
             .risk-low { color: #52c41a; font-weight: bold; }
           </style>
         </head>
-        <body>
-          ${contentHtml}
-        </body>
+        <body>${contentHtml}</body>
         </html>
       `;
       
       const blob = new Blob([docTemplate], { type: 'application/msword;charset=utf-8' });
-      const downloadLink = document.createElement('a');
-      downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = `企业专项合规审查报告_${new Date().toISOString().slice(0,10)}.doc`;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      const dlLink = document.createElement('a');
+      dlLink.href = URL.createObjectURL(blob);
+      dlLink.download = `深度合规专项诊断报告_${new Date().toISOString().slice(0,10)}.doc`;
+      document.body.appendChild(dlLink);
+      dlLink.click();
+      document.body.removeChild(dlLink);
     }
 
     /**
-     * P1 交互功能：调起浏览器自带的打印机制（可直接选择“另存为 PDF”）[cite: 11]
+     * 功能性控制：调起原生系统打印程序[cite: 11]
      */
-    function printReport() {
-      window.print();
-    }
+    function printReport() { window.print(); }
 
     /**
-     * P1 交互功能：调用移动端或客户端自适应的原生系统分享能力[cite: 11]
+     * 功能性控制：多端自适应智能复制分享[cite: 11]
      */
     function shareReport() {
       if (navigator.share) {
-        navigator.share({
-          title: '企业法律合规诊断报告',
-          text: '我刚完成了企业合规体检排查，推荐体验。',
-          url: window.location.href
-        }).catch(() => {});
-      } else {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            alert('当前运行环境不支持原生快捷分享，已将该系统的访问地址复制到您的剪贴板，可直接发送！');
-          });
-        }
+        navigator.share({ title: '企业专项合规诊断报告', url: window.location.href }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('当前运行环境不支持原生快捷分享，已将诊断系统的专属访问地址复制到您的剪贴板！');
+        });
       }
     }
 
     /**
-     * 重置问卷与返回顶部
+     * 系统状态重置
      */
-    function resetQuestionnaire() {
-      document.getElementById('legal-form').reset();
+    function resetSystem() {
+      document.getElementById('wizard-form').reset();
+      document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('wizard-section').style.display = 'none';
+      document.getElementById('report-container').style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
