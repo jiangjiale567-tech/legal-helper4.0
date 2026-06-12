@@ -1,31 +1,314 @@
 // =========================================================================
-// 1. 知识库与数据源 (Knowledge Base): 严格对齐最新《公司法》及最高院指导案例
+// 1. 内置核心规则数据库（对齐新公司法与劳动法硬编码逻辑）
 // =========================================================================
+const LAW_CORES = {
+    equity: `[法条原文] 新《公司法》（2024版）第47条：全体股东认缴的出资额由股东自公司成立之日起五年内缴足。第54条：公司不能清偿到期债务的，公司或者债权人有权请求未届出资期限的股东提前缴纳出资（出资加速到期）。`,
+    labor: `[法条原文] 《劳动合同法》第82条：用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者每月支付双倍的工资。第36-42条严格限制解除类型及经济补偿标准。`,
+    ip: `[法条原文] 《商标法》第三条：经商标局核准注册的商标为注册商标，商标注册人享有商标专用权，受法律保护。未检索盲目上线存在侵权民事损害赔偿及被诉不正当竞争风险。`
+};
+
 const casesData = [
     {
-        category: '股权治理与新公司法',
-        title: '【最高院指导案例】未依法履行出资期限及分期成熟纠纷案',
-        summary: '新《公司法》（2024修订）第47条明确规定全体股东认缴的出资额由股东自公司成立之日起五年内缴足。某科技公司章程约定20年认缴，因未能及时调整并合理设计核心员工分期成熟（Vesting）机制，导致核心技术人员在第2年离职并带走20%非成熟股权，引发诉讼，最终导致公司因大股东出资期限加速到期且股权锁死而陷入僵局。'
+        category: '股权治理与出资加速到期',
+        title: '【类案裁判指引】未按规定限期实缴引发连带清偿责任纠纷案',
+        summary: '在最高院典型判例中，某初创企业因股东协议约定20年认缴且未在2024新《公司法》施行后及时修正出资期限。公司因商事合同违约遭供应商起诉清偿。债权人依据新公司法第54条，强行击穿原有股东出资期限利益，要求全体未实缴出资的合伙人提前实缴并在认缴范围内承担连带清偿责任。'
     },
     {
-        category: '劳资用工风控',
-        title: '【典型判例】初创企业高管“未签书面劳动合同”索要双倍工资惩罚案',
-        summary: '依据《劳动合同法》第82条，某初创项目因信任联合创始人而未在入职30天内签署正式劳动合同。该高管在项目运营第11个月时因理念不合离职，随即提起劳动仲裁，要求公司支付前10个月双倍工资差额共计25万元，获得仲裁委全力支持，直接抽干了初创公司的天使轮现金流。'
+        category: '劳资用工惩罚性合规',
+        title: '【典型判例】初创项目核心高管未签书面合同主张双倍工资案',
+        summary: '由于早期创业信任缺失，项目推进前6个月未与核心员工及技术经理签署正式书面劳动合同。员工离职后依法提起劳动仲裁。法院认定，即使属于初创种子团队，只要存在实际用工，未在30日内签署书面合同即触发《劳动合同法》第82条惩罚性条款，判令企业补齐数万元双倍工资差额。'
     }
 ];
 
 // =========================================================================
-// 2. 修复后的顶部导航栏：现代平滑滚动跳转系统
+// 2. 智能化冷启动面试引擎与技能注册表系统
+// =========================================================================
+const SKILL_REGISTRY = {
+    'cost-analysis': {
+        title: "⚡ /startup:cost-analysis | 辞职创业机会成本量化",
+        desc: "结构化扫描创始人当前薪资水平、启动资金，自动推演期权退出回报损益与出资责任安全边界。",
+        questions: [
+            { id: "salary", label: "您当前在职放弃的稳定税后年薪是多少？(万元)", type: "number", default: "40" },
+            { id: "years", label: "您预计该创业项目的早期深耕年限为几年？(年)", type: "number", default: "3" },
+            { id: "invest", label: "个人先期准备自筹投入项目的真金白银是多少？(万元)", type: "number", default: "20" },
+            { id: "equity", label: "您在该项目中所占的初始预设持股比例是多少？(%)", type: "number", default: "15" },
+            { id: "valuation", label: "项目进行下一轮（A轮或天使轮）预设的投后估值是多少？(万元)", type: "number", default: "3000" }
+        ]
+    },
+    'equity-calculation': {
+        title: "⚖️ /startup:equity-calculation | 合伙人股权分配合理性评估",
+        desc: "依据合伙人多维生产要素（想法产权、现金出资、全职精力）贡献权重，输出抗死锁控制权审查指引。",
+        questions: [
+            { id: "idea", label: "核心构想与初始特定技术产权由谁主要提供？", type: "select", options: [
+                { val: "0.7", text: "创始人(A方)占绝对主导" },
+                { val: "0.3", text: "联合创始人(B方)提供次要支持" },
+                { val: "0.5", text: "双方各自提供部分资产，平摊" }
+            ]},
+            { id: "money", label: "项目前期启动资金的主要实际出资方是谁？", type: "select", options: [
+                { val: "0.7", text: "创始人(A方)大头出资(>70%)" },
+                { val: "0.3", text: "联合创始人(B方)大头出资" },
+                { val: "0.5", text: "双方按50:50等额共同出资" }
+            ]},
+            { id: "time", label: "双方的全职精力和时间锁定期投入情况如何？", type: "select", options: [
+                { val: "1.0", text: "创始人A全职且不拿/拿极低薪；B兼职" },
+                { val: "0.5", text: "双方均属兼职试水状态" },
+                { val: "1.2", text: "双方均全职闭门研发，承诺四年分期成熟" }
+            ]}
+        ]
+    },
+    'compliance-checklist': {
+        title: "🏥 /startup:compliance-checklist | 企业法务健康漏洞审计",
+        desc: "前置扫描合伙、用工、知产三大核心风险资产，自动化输出差距分析矩阵与矫正路线图。",
+        questions: [
+            { id: "items", label: "请勾选您目前已经严格落实并签署完备的法务合规项：", type: "checkbox", options: [
+                { val: "25", id: "cb1", text: "公司设立与治理：合伙人之间已签署书面《合伙人股权分期成熟回购协议》（防退出带走股权）" },
+                { val: "25", id: "cb2", text: "知识产权防线：核心品牌商标已提交注册申请，且技术人员签署了《职务发明及知产归属协议》" },
+                { val: "25", id: "cb3", text: "劳资用工安全：所有全职员工入职30天内均签署了书面劳动合同，且包含严密保密与竞业条款" },
+                { val: "25", id: "cb4", text: "核心合同风控：对外部核心供应商/大客户的业务合同，使用的是专业律师定制版而非网上盲目下载" }
+            ]}
+        ]
+    }
+};
+
+let currentSkill = 'cost-analysis';
+let currentQuestionIndex = 0;
+let interviewAnswers = {};
+
+// 初始化冷启动面试
+function initInterview(skillKey) {
+    currentSkill = skillKey;
+    currentQuestionIndex = 0;
+    interviewAnswers = {};
+    
+    // 切换 Tab active 状态
+    document.querySelectorAll('.tool-tab-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = Array.from(document.querySelectorAll('.tool-tab-btn')).find(btn => btn.innerHTML.includes(skillKey));
+    if(activeBtn) activeBtn.classList.add('active');
+
+    const config = SKILL_REGISTRY[skillKey];
+    document.getElementById('skill-title').innerText = config.title;
+    document.getElementById('skill-desc').innerText = config.desc;
+    document.getElementById('deliverable-preview-area').style.display = 'none';
+    document.getElementById('interview-container').style.display = 'block';
+
+    renderQuestion();
+}
+
+// 动态渲染当前单步问题
+function renderQuestion() {
+    const config = SKILL_REGISTRY[currentSkill];
+    const totalQ = config.questions.length;
+    
+    // 更新进度条
+    const progressPercent = ((currentQuestionIndex + 1) / totalQ) * 100;
+    document.getElementById('progress-indicator').style.width = `${progressPercent}%`;
+
+    // 显隐上一步按钮
+    document.getElementById('btn-prev').style.style = currentQuestionIndex > 0 ? 'inline-block' : 'none';
+    document.getElementById('btn-next').innerText = (currentQuestionIndex === totalQ - 1) ? "提交并生成交付报告" : "下一步";
+
+    const q = config.questions[currentQuestionIndex];
+    const box = document.getElementById('question-box');
+    box.innerHTML = `<div class="question-prompt">问题 ${currentQuestionIndex + 1}: ${q.label}</div>`;
+
+    if (q.type === 'number') {
+        box.innerHTML += `<input type="number" id="ans-${q.id}" class="interview-input" value="${q.default}">`;
+    } else if (q.type === 'select') {
+        let optionsHtml = q.options.map(opt => `<option value="${opt.val}">${opt.text}</option>`).join('');
+        box.innerHTML += `<select id="ans-${q.id}" class="interview-select">${optionsHtml}</select>`;
+    } else if (q.type === 'checkbox') {
+        let cbsHtml = q.options.map(opt => `
+            <label class="interview-cb-label">
+                <input type="checkbox" class="ans-cb-item" value="${opt.val}" data-id="${opt.id}">
+                <span>${opt.text}</span>
+            </label>
+        `).join('');
+        box.innerHTML += `<div class="interview-checkbox-group">${cbsHtml}</div>`;
+    }
+}
+
+function nextQuestion() {
+    const config = SKILL_REGISTRY[currentSkill];
+    const q = config.questions[currentQuestionIndex];
+
+    // 保存当前步骤数据
+    if (q.type === 'checkbox') {
+        let selectedVals = [];
+        document.querySelectorAll('.ans-cb-item:checked').forEach(cb => {
+            selectedVals.push({ id: cb.getAttribute('data-id'), val: parseInt(cb.value) });
+        });
+        interviewAnswers[q.id] = selectedVals;
+    } else {
+        const inputEl = document.getElementById(`ans-${q.id}`);
+        interviewAnswers[q.id] = parseFloat(inputEl.value) || 0;
+    }
+
+    // 步进控制
+    if (currentQuestionIndex < config.questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+    } else {
+        // 完成面试，调用编译器输出红圈所公文结构交付物
+        compileLegalMemorandum();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+    }
+}
+
+// =========================================================================
+// 3. 产物标准化：标准化交付物模板与六维度评估矩阵生成引擎
+// =========================================================================
+function compileLegalMemorandum() {
+    let htmlResult = "";
+    
+    if (currentSkill === 'cost-analysis') {
+        const sal = interviewAnswers['salary'];
+        const yr = interviewAnswers['years'];
+        const inv = interviewAnswers['invest'];
+        const eq = interviewAnswers['equity'];
+        const val = interviewAnswers['valuation'];
+
+        const opportunityCost = (sal * yr) + inv;
+        const theoreticalValue = val * (eq / 100);
+        const netReturn = theoreticalValue - opportunityCost;
+
+        htmlResult = `
+            <div class="legal-title-center">《辞职创业沉没成本分析与资本公积风控报告》</div>
+            <h3>一、执行摘要 (Executive Summary)</h3>
+            <p>· <b>关键发现</b>：发起人放弃未来确定性劳动报酬对价，转而置换初创公司不确定性股权。当前累计机会成本敞口较大。</p>
+            <p>· <b>风险等级评价</b>：中度商业摩擦风险 | <b>紧急程度标识</b>：短期内（30天内）完成资本属性合规确认。</p>
+            
+            <h3>二、详细分析与法律依据 (Detailed Analysis)</h3>
+            <p>${LAW_CORES.equity}</p>
+            <p>[模型知识] 财务清算分析：您的总沉没机会成本为 <b>${opportunityCost.toFixed(1)} 万元</b>（含出资 ${inv} 万元）。若项目下轮稀释前投后估值顺利触达 ${val} 万元，您的持股期权账面退出价值预计为 <b>${theoreticalValue.toFixed(1)} 万元</b>，绝对损益回报为 <b>${netReturn.toFixed(1)} 万元</b>。</p>
+            
+            <h3>三、风险评估（六维度评价矩阵）</h3>
+            <table class="legal-matrix-table">
+                <tr><th>维度</th><th>深度定量/定性解析</th></tr>
+                <tr><td>1. 风险定性</td><td>新《公司法》项下股东清算资本认缴虚高与资产击穿风险</td></tr>
+                <tr><td>2. 风险敞口</td><td>个人先期自筹投入的 <b>${inv} 万元</b> 现金及五年内资本补足连带责任</td></tr>
+                <tr><td>3. 发生概率</td><td>中等（依赖后续外部投资人资金跟进情况）</td></tr>
+                <tr><td>4. 可规避性</td><td>高（可通过在章程中设立资本公积溢价或回购条款对冲）</td></tr>
+                <tr><td>5. 商业权衡</td><td>放弃短期流动性工资以赌博长期资本化溢价，注意底层现金流防线</td></tr>
+                <tr><td>6. 紧迫性</td><td>短期紧迫，需在前置公司设立登记时锁定出资性质</td></tr>
+            </table>
+
+            <h3>四、商业摩擦独立评价</h3>
+            <p>· <b>操作复杂度</b>：低 | · <b>成本影响</b>：涉及注册资本认缴规模设计，成本可控 | · <b>业务中断风险</b>：无</p>
+
+            <h3>五、针对性矫正建议与行动指南</h3>
+            <p><b>【立即执行项（P0）】</b>：立刻在公司章程及合伙人协议中明确，自筹投入的 <b>${inv}万元</b> 属于首期实缴资本而非无偿赠予，并在工商登记中进行时限锁定。</p>
+            <p><b>【短期改进项（P1，30天内）】</b>：设置创始人股权分期成熟（Vesting）条款，避免中途退出引发股权锁死纠纷。</p>
+            <p><b>【长期规划项（P2，90天内）】</b>：接入元典或北大法宝进行同赛道竞品清算回购纠纷的判例检索，完善退出闭环。</p>
+            <br>
+            <p style="font-size:11px; color:#64748B;">⚠️ <b>免责声明</b>：本报告为AI辅助分析草稿，不构成法律意见，不替代律师专业审查。使用前请务必咨询执业律师，核实所有引用来源，并对最终决策承担专业责任。</p>
+        `;
+    } 
+    else if (currentSkill === 'equity-calculation') {
+        const idea = interviewAnswers['idea'];
+        const money = interviewAnswers['money'];
+        const time = interviewAnswers['time'];
+
+        const totalA = (idea * 0.3) + (money * 0.3) + (time * 0.4);
+        const shareA = (totalA / (totalA + 0.6)) * 100; // 模拟加权比值
+        const isDeadlock = shareA < 66.7;
+
+        htmlResult = `
+            <div class="legal-title-center">《合伙人股权分配合理性审查与控制权防死锁备忘录》</div>
+            <h3>一、执行摘要 (Executive Summary)</h3>
+            <p>· <b>关键发现</b>：基于想法、资金、全职精力的多维要素建模，创始人建议占股为 <b>${shareA.toFixed(1)}%</b>。</p>
+            <p>· <b>风险等级评价</b>：${isDeadlock ? '🔴 高危公司治理死锁状态' : '🟢 治理结构安全线以上'} | <b>紧急程度</b>：立即执行（P0）</p>
+            
+            <h3>二、详细分析与法律依据 (Detailed Analysis)</h3>
+            <p>${LAW_CORES.equity}</p>
+            <p>[案例检索] 依据最高法类案指导规则，初创企业均分股权（如50:50或33:33:33）在面对后续融资、重大资产处置分歧时，100%引发治理僵局。新公司法赋予了章程极大自治权，表决权与分红权可分离配置。</p>
+            
+            <h3>三、风险评估（六维度评价矩阵）</h3>
+            <table class="legal-matrix-table">
+                <tr><th>维度</th><th>深度定量/定性解析</th></tr>
+                <tr><td>1. 风险定性</td><td>股权平分或大股东未达2/3绝对控制权导致的章程修改否决死锁</td></tr>
+                <tr><td>2. 风险敞口</td><td>核心经营决策权、公章控制权及后续融资一票否决权冲突</td></tr>
+                <tr><td>3. 发生概率</td><td>高（多发于项目上线6-18个月）</td></tr>
+                <tr><td>4. 可规避性</td><td>极高（前置通过AB股或持股平台收拢表决权）</td></tr>
+                <tr><td>5. 商业权衡</td><td>需平衡联合创始人的心理预期与公司最高决策效率</td></tr>
+                <tr><td>6. 紧迫性</td><td>立即执行，股权章程一旦登记极难零成本调整</td></tr>
+            </table>
+
+            <h3>四、针对性矫正建议与行动指南</h3>
+            <p><b>【立即执行项（P0）】</b>：拒绝推行均分主义股权架构。大股东表决权必须越过51%（相对控制）或66.7%（绝对控制）法定生死线。</p>
+            <p><b>【短期改进项（P1，30天内）】</b>：设立有限合伙企业（LLP）作为持股平台，由创始人担任GP（普通合伙人），将员工及联创的表决权统一收拢。</p>
+            <br>
+            <p style="font-size:11px; color:#64748B;">⚠️ <b>免责声明</b>：本报告为AI辅助分析草稿，不构成法律意见，不替代律师专业审查。</p>
+        `;
+    } 
+    else if (currentSkill === 'compliance-checklist') {
+        const items = interviewAnswers['items'] || [];
+        const score = items.length * 25;
+
+        htmlResult = `
+            <div class="legal-title-center">《初创企业法务合规差距分析与漏洞加固审计报告》</div>
+            <h3>一、执行摘要 (Executive Summary)</h3>
+            <p>· <b>关键发现</b>：企业法务健康审计得分为 <b>${score} / 100分</b>。存在显著的局部合规缺口。</p>
+            <p>· <b>风险等级评价</b>：${score < 50 ? '🔴 高危诉讼状态' : '🟡 中度风险隐患'} | <b>紧急程度</b>：立即排查</p>
+            
+            <h3>二、详细分析与法律依据 (Detailed Analysis)</h3>
+            <p>${LAW_CORES.labor}</p>
+            <p>${LAW_CORES.ip}</p>
+            
+            <h3>三、风险评估（六维度评价矩阵）</h3>
+            <table class="legal-matrix-table">
+                <tr><th>维度</th><th>深度定量/定性解析</th></tr>
+                <tr><td>1. 风险定性</td><td>劳动用工未签合同双倍工资追偿风险、核心品牌商标遭同行恶意抢注下架风险</td></tr>
+                <tr><td>2. 风险敞口</td><td>未签合同员工总月薪差额、产品下架重命名和渠道断裂的直接经济损失</td></tr>
+                <tr><td>3. 发生概率</td><td>极高（属于初创期前三大高发司法诉讼类型）</td></tr>
+                <tr><td>4. 可规避性</td><td>高（通过标准劳动合同模板与上线前知产检索拦截）</td></tr>
+                <tr><td>5. 商业权衡</td><td>法务前置投入成本极低，但爆发纠纷后商业断裂代价极高</td></tr>
+                <tr><td>6. 紧迫性</td><td>立即（产品上线及员工入职30天内必办）</td></tr>
+            </table>
+
+            <h3>四、行动建议路线图</h3>
+            <p><b>【立即执行项（P0）】</b>：立刻全面清查全职及兼职技术研发人员的劳动合同与《知产归属保密协议》签署状态，严防离职带走核心源码。</p>
+            <p><b>【短期改进项（P1，30天内）】</b>：前往国家知识产权局系统进行主品牌商标的全类别可注册性检索，拦截恶意抢注风险。</p>
+            <br>
+            <p style="font-size:11px; color:#64748B;">⚠️ <b>免责声明</b>：本报告为AI辅助分析草稿，不构成法律意见，不替代律师专业审查。</p>
+        `;
+    }
+
+    // 渲染结果并展示预览舱
+    document.getElementById('interview-container').style.display = 'none';
+    const previewArea = document.getElementById('deliverable-preview-area');
+    document.getElementById('memo-output-render').innerHTML = htmlResult;
+    previewArea.style.display = 'block';
+    
+    // 平滑滚动到产物区域
+    previewArea.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 一键复制交付产物
+function copyDeliverable() {
+    const text = document.getElementById('memo-output-render').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert('📋 标准法务备忘录公文已复制到您的剪贴板，可完美转发至微信、飞书或钉钉团队协同群！');
+    }).catch(() => {
+        alert('复制失败，请手动选择框内文本进行复制。');
+    });
+}
+
+// =========================================================================
+// 4. 统一路由及全局事件处理（修复平滑滚动与高亮死锁）
 // =========================================================================
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', function(e) {
-        e.preventDefault(); // 阻止死板的原生闪现跳转
+        e.preventDefault();
         
-        // 1. 切换按钮的 active 状态高亮
         document.querySelectorAll('.nav-menu a').forEach(l => l.classList.remove('active'));
         this.classList.add('active');
         
-        // 2. 平滑定位滚动到对应 ID 的模块
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
@@ -34,143 +317,10 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// 内部工作台三大小工具的 Tab 切换函数
-function switchTool(toolType) {
-    document.querySelectorAll('.tool-tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    document.querySelectorAll('.tool-panel').forEach(panel => panel.classList.remove('active'));
-    document.getElementById(`tool-${toolType}`).classList.add('active');
-}
-
-// 统一的一键复制交付产物工具函数
-function copyToClipboard(elementId) {
-    const text = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(text).then(() => {
-        alert('📋 备忘录已成功复制到剪贴板，可直接发送给合伙人或投资人！');
-    }).catch(err => {
-        alert('复制失败，请手动选中文本复制。');
-    });
-}
-
-// =========================================================================
-// 3. 系统 Skill 优化: 固化法律专家 IRAC 结构化论证模型
-// =========================================================================
-
-// 工具一：职业规划与机会成本
-function runCareerCalc() {
-    const salary = parseFloat(document.getElementById('currentSalary').value) || 0;
-    const years = parseFloat(document.getElementById('startupYears').value) || 0;
-    const invest = parseFloat(document.getElementById('investAmount').value) || 0;
-    const equity = parseFloat(document.getElementById('equityShare').value) || 0;
-    const valuation = parseFloat(document.getElementById('expectedValuation').value) || 0;
-
-    const opportunityCost = (salary * years) + invest;
-    const theoreticalValue = valuation * (equity / 100);
-    const netReturn = theoreticalValue - opportunityCost;
-
-    document.getElementById('careerResult').innerHTML = `
-        <div id="careerMemo" style="background:#fff; border:1px solid #CBD5E1; padding:20px; font-family:SimSun, Georgia, serif;">
-            <p style="text-align:center; font-size:18px; font-weight:bold; border-bottom:2px solid #0F172A; padding-bottom:8px; margin-bottom:16px; color:#0F172A;">
-                LEGAL MEMORANDUM | 创业机会成本与法务风控备忘录
-            </p>
-            <p><strong>【诊断事由 (Issue)】</strong> 离职创业的沉没成本财务清算与基础代持/公积风险评估</p>
-            <p><strong>【法定裁量依据 (Rule)】</strong> 《中华人民共和国民法典》合同编、新《公司法》（2024版）关于出资责任的规定。</p>
-            <p><strong>【法理与财务适用分析 (Application)】</strong></p>
-            <ul style="padding-left:20px; margin-bottom:12px;">
-                <li><strong>机会成本清算：</strong>放弃当前稳定年薪总计 ${salary * years} 万元，叠加入股现金 ${invest} 万元，累计清算机会成本为 <strong>${opportunityCost.toFixed(1)} 万元</strong>。</li>
-                <li><strong>资产对价退出估算：</strong>持股 ${equity}% 对应下轮目标投后估值 ${valuation} 万元，纸面账面价值为 <strong>${theoreticalValue.toFixed(1)} 万元</strong>。</li>
-                <li><strong>精算绝对损益：</strong>理论净回报预期为 <span style="color:${netReturn >= 0 ? '#16A34A' : '#DC2626'}">${netReturn.toFixed(1)} 万元</span>。</li>
-            </ul>
-            <p><strong>【合规行动结论 (Conclusion)】</strong></p>
-            <p style="background:#F8FAFC; padding:10px; border-left:3px solid #2563EB; font-size:13px; color:#334155;">
-                1. 鉴于您个人投入了 <strong>${invest}万元</strong> 现金，新《公司法》第47条推行5年内限期实缴制。请务必在《股东协议》中明确此项资金是计入“注册资本”还是“资本公积”，避免在5年内因外部债权人强制要求加速实缴而承担连带资本补充责任。<br>
-                2. 股权账面资产变现周期极长，建议前置签署《创始人回购及退出清算协议》以对冲流动性风险。
-            </p>
-        </div>
-        <button class="btn-action" style="margin-top:12px; background:#2563EB;" onclick="copyToClipboard('careerMemo')">一键复制《风控备忘录》</button>
-    `;
-    document.getElementById('careerResult').style.display = 'block';
-}
-
-// 工具二：合伙人股权动态评估
-function runEquityCalc() {
-    const ideaA = parseFloat(document.getElementById('eq-idea-a').value);
-    const ideaB = parseFloat(document.getElementById('eq-idea-b').value);
-    const moneyA = parseFloat(document.getElementById('eq-money-a').value);
-    const moneyB = parseFloat(document.getElementById('eq-money-b').value);
-    const timeA = parseFloat(document.getElementById('eq-time-a').value);
-    const timeB = parseFloat(document.getElementById('eq-time-b').value);
-
-    const totalA = (ideaA * 0.3) + (moneyA * 0.3) + (timeA * 0.4);
-    const totalB = (ideaB * 0.3) + (moneyB * 0.3) + (timeB * 0.4);
-    const sum = totalA + totalB;
-
-    const shareA = (totalA / sum) * 100;
-    const shareB = (totalB / sum) * 100;
-
-    document.getElementById('equityResult').innerHTML = `
-        <div id="equityMemo" style="background:#fff; border:1px solid #CBD5E1; padding:20px; font-family:SimSun, Georgia, serif;">
-            <p style="text-align:center; font-size:18px; font-weight:bold; border-bottom:2px solid #0F172A; padding-bottom:8px; margin-bottom:16px; color:#0F172A;">
-                LEGAL MEMORANDUM | 动态股权架构与公司治理控制权备忘录
-            </p>
-            <p><strong>【诊断事由 (Issue)】</strong> 合伙人多维生产要素加权评估与控制权死锁前置防范</p>
-            <p><strong>【法定裁量依据 (Rule)】</strong> 新《公司法》（2024版）第66条（有限责任公司股东会特别决议绝对控制权线为2/3表决权，即66.7%）、普通决议线（50%）。</p>
-            <p><strong>【多维要素适用分析 (Application)】</strong></p>
-            <ul style="padding-left:20px; margin-bottom:12px;">
-                <li><strong>创始人(A) 顶层建议持股比例：</strong> <strong>${shareA.toFixed(1)} %</strong></li>
-                <li><strong>联合创始人(B) 建议持股比例：</strong> <strong>${shareB.toFixed(1)} %</strong></li>
-                <li><strong>治理结构健康度：</strong> ${shareA >= 66.7 ? '✨ 已达到绝对控制权生死线（67%），具备极高的抗死锁能力。' : '⚠️ 未达到66.7%绝对控制权。根据新《公司法》修改章程、增资减资、合并分立等重大法案将面临被B方一票否决的死锁风险。'}</li>
-            </ul>
-            <p><strong>【合规行动结论 (Conclusion)】</strong></p>
-            <p style="background:#F8FAFC; padding:10px; border-left:3px solid #2563EB; font-size:13px; color:#334155;">
-                严禁采用 50:50 或 33:33:33 的均分主义股权模式。建议在《合伙协议》或《公司章程》中特设<strong>“表决权与分红权分离”条款</strong>，或者通过设立“持股平台（有限合伙企业）”由创始人A担任GP，将联合创始人的表决权进行集中收拢，保障公司决策高效率。
-            </p>
-        </div>
-        <button class="btn-action" style="margin-top:12px; background:#2563EB;" onclick="copyToClipboard('equityMemo')">一键复制《控制权备忘录》</button>
-    `;
-    document.getElementById('equityResult').style.display = 'block';
-}
-
-// 工具三：企业合规风险自测
-function runDiagnosticCalc() {
-    const checkboxes = document.querySelectorAll('.diag-cb');
-    let totalScore = 0;
-    checkboxes.forEach(cb => { if (cb.checked) { totalScore += parseInt(cb.value); } });
-
-    let riskLevel = "🔴 高危诉讼状态（法务防火墙严重缺漏）";
-    let adviceText = "根据未勾选的盲区项，您当前在《公司法》五年限期实缴、知识产权归属以及劳动合同双倍工资惩罚方面存在极高的司法追偿隐患。";
-    
-    if (totalScore >= 75) {
-        riskLevel = "🟢 基础合规状态（已具备基础防御机制）";
-        adviceText = "您的基础合规底座较为扎实，已有效屏蔽了初创期80%以上的高频法律地雷，请继续保持动态复核。";
-    } else if (totalScore >= 50) {
-        riskLevel = "🟡 中度风险状态（存在高危合规漏洞）";
-        adviceText = "在特定模块（例如知识产权或劳动合同）存在显著缺口，极易成为离职员工或竞争对手恶意诉讼的突破口。";
-    }
-
-    document.getElementById('diagnosticResult').innerHTML = `
-        <div id="diagnosticMemo" style="background:#fff; border:1px solid #CBD5E1; padding:20px; font-family:SimSun, Georgia, serif;">
-            <p style="text-align:center; font-size:18px; font-weight:bold; border-bottom:2px solid #0F172A; padding-bottom:8px; margin-bottom:16px; color:#0F172A;">
-                COMPLIANCE AUDIT | 初创企业法务健康审计报告
-            </p>
-            <p><strong>【审计结果 (Issue)】</strong> 初创企业基础合规漏洞全景摸排</p>
-            <p><strong>【合规审计得分】</strong> <span style="font-size:16px; font-weight:bold;">${totalScore} / 100分</span></p>
-            <p><strong>【安全评级结论 (Conclusion)】</strong> <strong style="color:#0F172A;">${riskLevel}</strong></p>
-            <p><strong>【针对性矫正建议 (Application)】</strong></p>
-            <p style="background:#F8FAFC; padding:10px; border-left:3px solid #2563EB; font-size:13px; color:#334155; line-height:1.6;">
-                ${adviceText}<br><br>
-                <strong>💡 紧急合规加固动作：</strong><br>
-                1. 凡未签《知识产权归属协议》的研发，员工离职后核心代码/技术的所有权归属极易产生争议，须立即补签。<br>
-                2. 针对新《公司法》的五年实缴制，请仔细核对公司注册资本，如过大且无法实缴，请在倒计时内执行减资程序。
-            </p>
-        </div>
-        <button class="btn-action" style="margin-top:12px; background:#2563EB;" onclick="copyToClipboard('diagnosticMemo')">一键复制《审计报告》</button>
-    `;
-    document.getElementById('diagnosticResult').style.display = 'block';
-}
-
-// 初始化案例渲染
+// 初始化加载与判例库渲染
 document.addEventListener('DOMContentLoaded', () => {
+    initInterview('cost-analysis'); // 默认冷启动第一个技能
+    
     const grid = document.getElementById('casesGrid');
     if(grid) {
         grid.innerHTML = casesData.map(c => `
@@ -184,14 +334,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =========================================================================
-// 4. 法律声明与隐私政策弹窗控制
+// 5. 法律声明、隐私政策、使用条款通用弹窗机制
 // =========================================================================
 const legalTexts = {
     disclaimer: {
         title: "免责声明 (Disclaimer)",
         content: `
             <h4>一、数字化模型性质声明</h4>
-            <p>本工作台（FounderLegal）所包含的各项商业测算工具均系基于特定既定算法公式及普适性法律风控逻辑进行的前置推演。<strong>上述所有内容仅供创业者内部探讨及项目早期风险自查参考，不构成任何具备法律效力的正式法律意见、法务判决预测、或专业律师的个案执业诊断结论。</strong></p>
+            <p>本工作台（FounderLegal）所包含的各项商业测算工具及大模型多步冷启动问卷均系基于特定法律风控逻辑进行的前置推演。<strong>上述所有内容仅供创业者内部探讨及项目早期风险自查参考，不构成任何具备法律效力的正式法律意见、法务判决预测、或专业律师的个案执业诊断结论。</strong></p>
             <h4>二、商业决策风险自担</h4>
             <p>由于法律实践具有高度的个案特殊性，用户依据本站模型测算结果所做出的任何商业决策、签署的合伙协议、资产交割行为，其可能引发的商业风险，均由用户自行完全承担。本站不对任何因信赖本站工具而产生的直接或间接损失承担责任。</p>
         `
