@@ -8,6 +8,12 @@
     --radius-sm: 4px;
 }
 
+/* 启用全局平滑滚动，并防止顶部导航栏遮挡标题 */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 74px; 
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -307,9 +313,7 @@ body {
 .consult-box h2 { margin-bottom: 8px; font-size: 22px; }
 .consult-box p { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
 
-/* ========================================== */
-/* 新型法律声明页脚与高级弹窗样式 */
-/* ========================================== */
+/* 法律声明页脚与高级弹窗样式 */
 .main-footer {
     background: #FFFFFF;
     border-top: 1px solid var(--border-color);
@@ -373,7 +377,7 @@ body {
 .btn-confirm-modal { background: var(--text-primary); color: #FFFFFF; border: none; padding: 10px 22px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm); cursor: pointer; }
 .btn-confirm-modal:hover { background: var(--brand-blue); }
 
-/* 📱 移动端终极断点适配 */
+/* 📱 移动端断点适配 */
 @media (max-width: 768px) {
     .hero-header h1 { font-size: 24px; }
     .stats-grid { grid-template-columns: 1fr; gap: 12px; }
