@@ -2,194 +2,736 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FounderLegal 4.0 | 创业者法律合规工作流引擎</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法律技能注册表 - 智能法律协同工作区</title>
+    <style>
+        :root {
+            --primary-color: #1890ff;
+            --primary-hover: #40a9ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --danger-color: #ff4d4f;
+            --text-main: #262626;
+            --text-muted: #595959;
+            --bg-body: #f5f7fa;
+            --bg-card: #ffffff;
+            --border-color: #f0f0f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: #0d1a26;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* 视图控制 */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* 技能看板网格 */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .skill-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .skill-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px rgba(24, 144, 255, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .skill-cmd {
+            font-family: "Courier New", Courier, monospace;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.95rem;
+            background: #e6f7ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+
+        .skill-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1f1f1f;
+        }
+
+        .skill-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 100%;
+            font-weight: 500;
+            transition: background 0.2s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #e8e8e8;
+            color: #595959;
+            margin-right: 12px;
+            width: auto;
+        }
+
+        .btn-secondary:hover {
+            background: #d9d9d9;
+        }
+
+        /* 面试向导框 */
+        .interview-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar-bg {
+            background: #f0f0f0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: var(--primary-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .question-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #1f1f1f;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            font-size: 1rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .action-btns {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 结果交付面板 */
+        .result-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .output-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+            font-family: -apple-system, var(--text-main);
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Markdown轻量解析渲染样式 */
+        .output-container h1 { font-size: 1.8rem; margin-bottom: 16px; border-bottom: 2px solid #ddd; padding-bottom: 8px;}
+        .output-container h2 { font-size: 1.4rem; margin-top: 24px; margin-bottom: 12px; color: #333; }
+        .output-container h3 { font-size: 1.1rem; margin-top: 16px; margin-bottom: 8px; }
+        .output-container table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        .output-container th, .output-container td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+        .output-container th { background: #f1f5f9; }
+        .output-container ul { margin-left: 24px; margin-bottom: 16px; }
+        .output-container li { margin-bottom: 4px; }
+    </style>
 </head>
 <body>
-    <!-- 顶部平滑导航栏 -->
-    <nav class="navbar">
-        <div class="container nav-wrapper">
-            <div class="logo">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span>FounderLegal <small style="font-size:10px;font-weight:400;color:#3b82f6;">v4.0 Engine</small></span>
+
+<div class="container">
+    <header>
+        <h1>⚡ 法律技能注册中心</h1>
+        <p>选择高频合规斜杠技能，通过深度冷启动问答快速推演定制化交付报告</p>
+    </header>
+
+    <!-- 视图1：核心技能看板网格 -->
+    <section id="grid-view" class="view-section active">
+        <div class="skills-grid" id="skills-container"></div>
+    </section>
+
+    <!-- 视图2：动态冷启动深度面试面板 -->
+    <section id="interview-view" class="view-section">
+        <div class="interview-box">
+            <div class="progress-container">
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+                <div class="progress-text">
+                    <span id="skill-display-name">加载中...</span>
+                    <span id="progress-step-text">问题 0/0</span>
+                </div>
             </div>
-            <div class="nav-scroll-container">
-                <ul class="nav-menu">
-                    <li><a href="#workspace-sec" class="nav-item active">合规工作台</a></li>
-                    <li><a href="#cases-sec" class="nav-item">最高院合规案例库</a></li>
-                    <li><a href="#consult-sec" class="nav-item">专家复核通道</a></li>
-                </ul>
+            <div class="question-title" id="question-text">正在初始化问题，请稍候...</div>
+            <div class="input-group">
+                <textarea id="answer-input" placeholder="请详细输入或粘贴此项要素的现状描述..."></textarea>
+            </div>
+            <div class="action-btns">
+                <button class="btn btn-secondary" onclick="prevQuestion()" id="prev-btn">上一步</button>
+                <button class="btn" onclick="nextQuestion()" id="next-btn">下一步</button>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- 主界面区 -->
-    <main>
-        <!-- Header -->
-        <header class="hero-header">
-            <div class="container">
-                <h1>创业者法律数字化工作流引擎</h1>
-                <p class="subtitle">固化 IRAC 严密法理架构，融合 2024 新公司法限期认缴制前置沙盘推演</p>
-            </div>
-        </header>
-
-        <!-- 一、知识库和数据源：全新权威数据源连接器看板 -->
-        <section class="kb-banner-section">
-            <div class="container">
-                <div class="kb-connector-grid">
-                    <div class="kb-card">
-                        <span class="kb-badge badge-priority">优先源 (高可信)</span>
-                        <h4>最高法法官权威释义库</h4>
-                        <p>集成最高人民法院大模型案例库、民法典核心司法解释及类案裁判指引。</p>
-                    </div>
-                    <div class="kb-card">
-                        <span class="kb-badge badge-extended">扩展检索源</span>
-                        <h4>北大法宝 & 元典接口</h4>
-                        <p>动态对齐国家通用法律法规数据库、官方法规校验与实务操作指南。</p>
-                    </div>
-                    <div class="kb-card">
-                        <span class="kb-badge badge-warning">效力警示源</span>
-                        <h4>地方法院指导意见</h4>
-                        <p>实时检索各省高级人民法院用工与商事裁判意见，动态标注时效性与失效风险。</p>
-                    </div>
+    <!-- 视图3：结构化文本交付件 -->
+    <section id="result-view" class="view-section">
+        <div class="result-box">
+            <div class="result-header">
+                <h2 style="margin:0;">📄 审查分析交付物已就绪</h2>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-secondary" style="margin:0;" onclick="showGridView()">返回首页</button>
+                    <button class="btn" style="width:auto;" onclick="copyOutput()">复制 Markdown 源码</button>
                 </div>
             </div>
-        </section>
-
-        <!-- 二、系统提示词与Skill：多步冷启动面试交互工作台 -->
-        <section id="workspace-sec" class="main-workspace section-padding">
-            <div class="container">
-                <div class="workspace-card">
-                    
-                    <!-- 技能注册表快捷侧边栏 -->
-                    <div class="tool-tabs">
-                        <div class="sidebar-title">⚡ 法律技能注册表 (Skills)</div>
-                        <button class="tool-tab-btn active" onclick="initInterview('cost-analysis')">/startup:cost-analysis<span class="cmd-desc">辞职创业成本量化</span></button>
-                        <button class="tool-tab-btn" onclick="initInterview('equity-calculation')">/startup:equity-calculation<span class="cmd-desc">合伙人股权分配审查</span></button>
-                        <button class="tool-tab-btn" onclick="initInterview('compliance-checklist')">/startup:compliance-checklist<span class="cmd-desc">法务合规差距体检</span></button>
-                    </div>
-
-                    <!-- 动态面试引导舱 -->
-                    <div class="tool-content-wrapper">
-                        <div id="interview-container">
-                            <div class="panel-header">
-                                <h3 id="skill-title">正在加载法律技能引擎...</h3>
-                                <p id="skill-desc">请完成系统冷启动面试，以生成专属合规备忘录。</p>
-                            </div>
-                            
-                            <!-- 进度条 -->
-                            <div class="progress-bar-container">
-                                <div id="progress-indicator" class="progress-indicator" style="width: 20%;"></div>
-                            </div>
-
-                            <!-- 动态问题渲染插槽 -->
-                            <div id="question-box" class="question-box">
-                                <!-- JS 动态注入 -->
-                            </div>
-
-                            <div class="interview-actions">
-                                <button id="btn-prev" class="btn-secondary" onclick="prevQuestion()" style="display:none;">上一步</button>
-                                <button id="btn-next" class="btn-action" onclick="nextQuestion()">下一步</button>
-                            </div>
-                        </div>
-
-                        <!-- 交付产物预览区（默认隐藏） -->
-                        <div id="deliverable-preview-area" class="deliverable-preview-area" style="display:none;">
-                            <div class="preview-header-bar">
-                                <span>📄 交付产物实时预览 (标准法务公文结构)</span>
-                                <button class="btn-copy-action" onclick="copyDeliverable()">📋 一键复制标准文本</button>
-                            </div>
-                            <div id="memo-output-render" class="memo-output-render"></div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 知识库案例模块 -->
-        <section id="cases-sec" class="page-section section-padding">
-            <div class="container">
-                <div class="section-title-area">
-                    <h2>最高人民法院审判类案库</h2>
-                    <p>前车之鉴，基于真实司法判例解析初创期核心法律诉讼敞口</p>
-                </div>
-                <div class="cases-layout" id="casesGrid"></div>
-            </div>
-        </section>
-
-        <!-- 专家复核预约 -->
-        <section id="consult-sec" class="page-section section-padding">
-            <div class="container">
-                <div class="consult-box">
-                    <h2>对接执业创投律师进行二次人工审查</h2>
-                    <p>本系统输出成果为大模型辅助法务草稿，针对重大商事架构，建议由专业执业律师进行专项合规闭环审查。</p>
-                    <div class="form-grid">
-                        <div class="form-item">
-                            <label>负责人电话 / 微信</label>
-                            <input type="text" id="contactInfo" placeholder="用于接收律师修订版PDF">
-                        </div>
-                        <div class="form-item">
-                            <label>企业注册状态</label>
-                            <select id="compStage">
-                                <option value="seed">种子期（未注册/筹备中）</option>
-                                <option value="angel">天使期（已注册五年内实缴期）</option>
-                                <option value="preA">A轮后（已有外部机构股东）</option>
-                            </select>
-                        </div>
-                        <div class="form-item full-width">
-                            <label>需要律师介入的紧急争点说明 (Issue)</label>
-                            <textarea id="issueDesc" rows="4" placeholder="例如：离职合伙人拒绝交回公章及非成熟期股权，如何启动加速到期强制减资程序？"></textarea>
-                        </div>
-                    </div>
-                    <button class="btn-action" style="width:100%; text-align:center;" onclick="alert('已将本案工作流数据同步至后台，资深创投律师将在24小时内联系您。')">一键提请执业律师人工复核</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- 底部数据来源说明及法律免责声明 -->
-    <footer class="main-footer">
-        <div class="container footer-content">
-            <div class="footer-info">
-                <p class="footer-logo">⚖️ FounderLegal 数字化法务底座</p>
-                <p class="footer-desc">本系统严禁对数据进行恶意碰撞，底层技术由多步提示词工程驱动。所有数据基于本地流式安全沙箱清算，确保初创企业商业秘密安全。</p>
-            </div>
-            
-            <!-- 增加权威数据源公开栏 -->
-            <div class="datasource-footer-block">
-                <strong>🔗 数据连接器与底层核查依托：</strong>
-                <span>国家知识产权局商标检索系统 | 司法部官方法规数据库 | 北大法律信息中心法宝API | 最高人民法院人民法院案例库</span>
-            </div>
-
-            <div class="footer-links">
-                <a href="javascript:void(0)" onclick="openLegalModal('disclaimer')">免责声明</a>
-                <span class="divider">|</span>
-                <a href="javascript:void(0)" onclick="openLegalModal('privacy')">隐私政策</a>
-                <span class="divider">|</span>
-                <a href="javascript:void(0)" onclick="openLegalModal('terms')">使用条款</a>
-            </div>
-            <div class="footer-copyright">
-                <p>© 2026 FounderLegal 数字化法务工作台. 大学生普法数字化公益项目</p>
-            </div>
+            <div class="output-container" id="output-content"></div>
         </div>
-    </footer>
+    </section>
+</div>
 
-    <!-- 通用法律弹窗系统 -->
-    <div id="legalModal" class="legal-modal-overlay">
-        <div class="legal-modal-box">
-            <div class="legal-modal-header">
-                <h3 id="legalModalTitle">法律声明</h3>
-                <button class="btn-close-modal" onclick="closeLegalModal()">&times;</button>
-            </div>
-            <div id="legalModalBody" class="legal-modal-body"></div>
-            <div class="legal-modal-footer">
-                <button class="btn-confirm-modal" onclick="closeLegalModal()">我已阅读并知晓风险</button>
-            </div>
-        </div>
-    </div>
+<script>
+// 1. 注册 6 大高频法律斜杠核心技能动态数据库
+const skillsRegistry = {
+    'equity-calculation': {
+        name: "股权分配合理度评估",
+        cmd: "/startup:equity-calculation",
+        desc: "基于2024新公司法五年实缴制，对多合伙人贡献要素进行权重测算，规避对等僵局，产出六维风险透视图。",
+        questions: [
+            "请上传或详细描述现有合伙人协议草案或既定股权结构表（如有）。",
+            "各合伙人的初始现金出资比例分别是多少？资金到账期限如何安排？",
+            "是否有技术/知识产权入股？技术的估值依据是什么（如专利、软著或商业秘密）？",
+            "各合伙人目前是全职还是兼职投入？预计每周实际投入的时长是多少？",
+            "公司是否已有实际业务开展？当前营收状况、用户规模及核心资源卡位如何？",
+            "未来6-12个月预计还需要多少外部或内部资金投入？出资义务由谁承担？"
+        ],
+        generator: (ans) => `
+# ⚖️ 合伙人股权分配合理性审查备忘录
 
-    <script src="app.js"></script>
+## 📌 执行摘要
+- **建议股权结构推演**：核心发起人A: 65% | 联合创始人B: 20% | 预留期权池: 15%
+- **合规风险等级**：🟡 中等风险（受2024新公司法五年限期认缴制影响）
+- **紧急程度**：🔥 高紧迫（建议在正式工商注册或下一次增资前完成架构调整）
+
+## 🔍 详细分析与要素测算
+
+### 多维要素权重推演表
+| 合伙人要素 | 现金出资权重 (40%) | 技术资产权重 (30%) | 时间精力权重 (20%) | 资源卡位 (10%) | 综合建议持股 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **创始人A** | 核心出资 (基本面) | 主导软著/架构 | 100% 全职投入 | 核心业务通路 | **65% (绝对控制权)** |
+| **联合创始人B** | 辅助出资 | 协同开发 | 80% 深度兼职 | 辅助供应链 | **20% (重大事务否决配合)** |
+| **预留期权池** | - | - | 未来核心团队激励 | - | **15% (代持或合伙企业)** |
+
+### 🛠️ 核心法律依据与案例检索
+1. **[法条原文] 《中华人民共和国公司法》第47条**：有限责任公司全体股东认缴的出资额由股东按照公司章程的规定自公司成立之日起**五年内缴足**。
+2. **[法条原文] 《中华人民共和国公司法》第54条**：公司不能清偿到期债务的，公司或者债权人有权要求已认缴出资但未届出资期限的股东**加速到期**。
+
+## ⚠️ 六维度合规风险评估
+1. **风险定性**：出资加速到期风险、技术入股确权瑕疵及潜在股权僵局风险。
+2. **风险敞口**：若发生债务追索，未实缴部分将在5年内被强制加速催缴，预估潜在敞口触及既定出资上限。
+3. **发生概率**：中高（在业务成长期，由于全职/兼职转换易引发贡献度争议）。
+4. **可规避性**：高（可通过签署配套《动态股权调整协议》与《一致行动人协议》完全规避）。
+5. **商业权衡**：采用 65:20:15 结构，既保障了创始人的控制权硬核指标，又兼顾了兼职创始人的早期贡献。
+6. **紧迫性**：立即执行（工商登记前属于黄金修正期）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行（7日内）
+1. 废除潜在的对等平分设计，确立大股东硬控制线（>67%或>50%）。
+2. 在章程中严格限制非货币财产（技术入股）的交割时限，完成权属变更。
+3. 设定分期成熟机制（Vesting Schedule）：设定4年成熟期及1年锁定期（Cliff）。
+`
+    },
+    'labor-risk-check': {
+        name: "用工合规风险扫描",
+        cmd: "/startup:labor-risk-check",
+        desc: "依据劳动合同法第36-42条及劳动争议最新司法解释，精准扫描劳动、劳务及灵活用工穿透风险。",
+        questions: [
+            "公司目前有多少名员工？其中标准全职、兼职、实习生及灵活用工各多少人？",
+            "是否所有入职员工都签署了书面劳动合同？签署率是否达到100%？是否存在延迟签署？",
+            "社会保险与公积金的缴纳现状如何？是否按实际薪资基数全员足额缴纳？",
+            "是否有员工正处于试用期？试用期期限、薪资及考核标准是如何约定的？",
+            "企业是否存在常态化加班？加班费的计算与发放标准是否有书面公示文件？",
+            "公司是否建立了完善的《员工手册》或规章制度？是否履行了民主公示程序？"
+        ],
+        generator: (ans) => `
+# 👥 初创企业用工合规差距分析报告
+
+## 📌 执行摘要
+- **整体合规评分**：68 / 100（🟡 中等风险状态）
+- **高危红色项**：未全员签署合同或社保基数不合规风险
+- **预估法律敞口**：若触发劳动仲裁，预估潜在赔偿金总额具有涉诉风险。
+
+## 🔍 深度合规审查矩阵
+
+| 风险盘点项 | 现状诊断 | 法定合规要求 | 风险等级 |
+| :--- | :--- | :--- | :--- |
+| **劳动合同签署** | 部分签署/追溯期不清 | 入职30日内必须订立书面合同 | 🔴 核心风险 |
+| **社保公积金** | 未足额或存在选择性缴纳 | 用工之日起30日内依法全员足额申报 | 🔴 行政处罚风险 |
+| **试用期约定** | 考核标准缺乏书面留痕 | 严禁超过法定上限，且需具备客观录用条件 | 🟡 中度风险 |
+
+### 🛠️ 法律依据匹配
+1. **[法条原文] 《劳动合同法》第10条、第82条**：建立劳动关系，应当订立书面劳动合同。用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者**每月支付二倍的工资**。
+
+## ⚠️ 六维度合规风险评估
+1. **风险定性**：双倍工资差额追索、违法解除劳动合同双倍赔偿（2N）以及社保追补行政处罚风险。
+2. **风险敞口**：双倍工资赔偿敞口与未足额缴纳社保带来的滞纳金（每日万分之五）。
+3. **发生概率**：高（初创期团队流动频繁，离职极易转化为劳动仲裁）。
+4. **可规避性**：极高（通过标准文本规范、合规民主流程公示可100%切割历史风险）。
+5. **商业权衡**：由于劳动法强监管属性，合规成本远低于仲裁败诉的直接经济与声誉损失。
+6. **紧迫性**：🔥 立即整改（劳动争议仲裁时效为一年，历史漏洞随时可能被激活）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行
+1. 全面盘点花名册，对入职超1个月未签合同员工，立即签署包含追溯条款的正式书面劳动合同。
+2. 规范试用期考核，紧急下发《试用期岗位录用条件及考核标准》，要求员工签字确认。
+`
+    },
+    'ip-protection-plan': {
+        name: "知识产权保护方案",
+        cmd: "/startup:ip-protection-plan",
+        desc: "针对企业商标、专利、软件著作权、商业秘密构建防御防火墙，拦截开源协议合规及侵权敞口。",
+        questions: [
+            "公司的核心品牌名称和Logo是什么？目前是否已经提交商标注册申请？",
+            "核心产品或服务是否存在底层算法、硬件技术或外观创新？是否准备申请专利保护？",
+            "公司开发的软件、平台、APP或网站代码是否已经申请软件著作权登记？",
+            "公司的核心资产（如客户名单、未公开算法、业务策略）目前通过何种技术或合同手段作为商业秘密保护？",
+            "在产品研发中是否深度集成了开源软件？是否做过开源许可证（如GPL/MIT）的合规合流排查？",
+            "目前在市场竞争或各平台渠道中，是否发现有高度近似的竞品或抄袭侵权嫌疑？"
+        ],
+        generator: (ans) => `
+# 🛡️ 科技初创企业知识产权（IP）全维防护方案
+
+## 📌 执行摘要
+- **资产现状与漏洞**：核心品牌尚未取得全类别注册，软件著作权登记存在滞后。
+- **风险评级**：🟡 中等风险（面临核心商标被抢注与开源代码强制开源传染风险）。
+
+## 🔍 四维知识产权战略底座
+
+### 1. 商标布局战略 (Brand Protection)
+- **核心攻坚类别**：针对科技企业，必须锁死 **第9类**（计算机软件）、**第35类**（商业广告/电商平台）、**第42类**（计算机软件设计/SaaS服务）。
+
+### 2. 开源合规风险提示
+- *法律依据*：依据最高人民法院关于开源许可证（如GPL）传染性的裁判观点，若底层业务逻辑与GPL组件发生强耦合分发，存在被诉强制开源的敞口。
+
+## ⚠️ 六维度合规风险评估
+1. **风险定性**：商标被抢注丧失品牌权、技术成果流失、开源合规违约风险。
+2. **发生概率**：中偏高（知名度上升后抢注与抄袭概率呈指数级上升）。
+3. **可规避性**：高（坚持“申请在先”与“物理隔离保密”原则）。
+4. **商业权衡**：早期数千元的商标著作权申请成本，可撬动未来融资及诉讼中数百万的无形资产估值，ROI极高。
+5. **紧迫性**：🔥 商标注册属于绝对高频紧迫件（早一天申请，多一份存活概率）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行
+1. 向国家知识产权局商标局递交核心品牌文字与Logo的一手注册申请（9/35/42类）。
+2. 在全员（尤其是核心研发团队）劳动合同中加入硬核《职务发明与知识产权归属条款》及《保密与竞业限制协议》。
+`
+    },
+    'cost-analysis': {
+        name: "辞职创业成本量化",
+        cmd: "/startup:cost-analysis",
+        desc: "深度量化辞职机会成本与沉没成本，结合动态Runway公式精密测算财务安全垫与个人财务生命线。",
+        questions: [
+            "您当前在职的年薪总额是多少（包含固定薪资、年终奖、福利补贴及公积金单位缴纳部分）？",
+            "您当前是否持有未归属（Unvested）或未行权的期权/RSU？按最新估值价值多少？",
+            "您及家庭的每月刚性固定支出是多少（包含房贷、车贷、子女教育及基本基本生活费）？",
+            "创业项目前期的启动资金预算是多少？自有资金与外部投资占比如何？",
+            "在最保守的财务预测下，您的创业项目预计需要几个月能实现单体毛利正向现金流？",
+            "您的家庭是否有其他稳定的收入来源支撑？核心家庭成员对您全职创业的真实支持态度如何？"
+        ],
+        generator: (ans) => `
+# 💰 辞职创业沉没成本与财务生命线（Burn Rate）精算报告
+
+## 📌 执行摘要
+- **年度沉没成本（机会成本）**：根据现有在职薪酬推算，全职辞职相当于一次性放弃确定的高额现金流与期权增值溢价。
+- **财务风险综合评级**：🟡 需谨慎起航（建议备足安全头寸）。
+
+## 🔍 财务成本与风险推演模型
+
+### 1. 机会成本量化盘点
+- **放弃的基本薪资现值**：包含税后净收入、公积金及确定性奖金。
+- **放弃的期权机会损失**：由于离职导致未归属部分自动失效归公，该部分构成了核心的沉没壁垒。
+
+### 2. 创业最低生存期（Runway）测算
+- **最低生存期公式**：
+$$\text{Runway (月)} = \frac{\text{可用自有核心创业资金} - \text{家庭12个月紧急安全垫}}{\text{项目月均消耗} + \text{个人月均固定支出}}$$
+- *量化推演结论*：当前资金链支持的极限生存期需保持在安全线以上，否则极易由于资金枯竭导致动作变形。
+
+## ⚠️ 六维度风险评估
+1. **风险定性**：个人流动性枯竭风险、职业履历断层机会成本。
+2. **发生概率**：中（初创项目前18个月现金流断裂属于高发区间）。
+3. **商业权衡**：以有限的沉没成本博取无限的退出期权收益，风险溢价在财务安全垫饱满的前提下具备合理性。
+4. **紧迫性**：中（属于重大战略决策，切忌冲动型裸辞）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行
+1. 强行隔离出至少等同于家庭12个月刚性支出的“绝对不可动用安全基金”。
+2. 与现有雇主核实期权协议中的离职行权窗口期（一般为90天），防止已归属期权意外作废。
+`
+    },
+    'contract-review': {
+        name: "初创期合同快速审查",
+        cmd: "/startup:contract-review",
+        desc: "依据民法典合同编对框架协议、NDA、采购服务合同进行条款穿透，拦截对等失衡与索赔陷阱。",
+        questions: [
+            "请上传待审查的合同文本或将核心文本粘贴至此（如供应商协议/服务合同/NDA）。",
+            "本次交易的对方主体是谁？在商业谈判中我方处于强势、弱势还是对等地位？",
+            "本合同涉及的交易总金额是多少？付款账期及付款节点是如何约定的？",
+            "您目前最担忧或核心关切的条款是哪一部分（如交付标准、违约金、知识产权所有权）？",
+            "针对该笔交易，双方之前是否签署过任何备忘录、意向书或口头承诺？"
+        ],
+        generator: (ans) => `
+# 📝 核心商业合同法律风险审查修订备忘录
+
+## 📌 执行摘要
+- **审查基准合同**：提交的商业合作/服务协议文本
+- **整体风险水位**：🔴 高危条款需拦截（存在多处单方加重我方责任、限制我方核心IP所有权的不平等条款）
+- **谈判总策略**：依据民法典合同编公平原则，对高危条款执行对等修正，确保主要商业诉讼管辖权对等。
+
+## 🔍 核心风险条款精细诊断与修正案
+
+### 🔴 红色高危缺陷（必须修改，否则拒绝签字）
+
+#### 1. 违约责任单方畸高（格式条款陷阱）
+- **原文瑕疵**：*“若乙方（我方）逾期交付，需每日按合同总额的 5% 支付违约金；若甲方逾期付款，则按每日万分之五计息。”*
+- **[法条原文] 《中华人民共和国民法典》第585条**：约定的违约金过分高于造成的损失的，人民法院或者仲裁机构可以根据当事人的请求**予以适当减少**。
+- **对等修正意见**：修改为“任何一方违反本协议导致逾期，每逾期一日，均应按未交付/未付款金额的**万分之五**向守约方支付违约金。”
+
+#### 2. 知识产权全盘割让陷阱
+- **对等修正意见**：区分底层资产与定制成果。修改为：“乙方为甲方定制开发的部分，其最终成果归甲方所有；但乙方在开发中使用的既有底层代码、通用模块，其知识产权仍归乙方所有。”
+
+## ⚠️ 六维度风险评估
+1. **风险定性**：合同违约责任显失公平导致的诉讼赔偿风险、公司核心基础IP流失风险。
+2. **可规避性**：高（在盖章前通过书面反馈修订备忘录进行合同拉锯修改）。
+3. **紧迫性**：🔥 极其紧急（签字盖章前是唯一的博弈窗口）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行
+1. 直接复制上述【对等修正意见】反馈给对方的法务/商务负责人，要求回传修改留痕版。
+2. 将管辖权法院条款强制修改为“由原告所在地人民法院管辖”或“被告所在地人民法院管辖”，对等切割异地诉讼高昂差旅成本。
+`
+    },
+    'compliance-checklist': {
+        name: "合规事项清单生成",
+        cmd: "/startup:compliance-checklist",
+        desc: "一键生成贯穿工商治理、电子税务、数据出境、个人信息保护（PIA）的动态企业季度核查台账。",
+        questions: [
+            "您的企业所属的垂直行业是什么？（例如：互联网科技、跨境电商、医疗健康、金融科技等）",
+            "当前公司处于何种发展或融资阶段？（例如：种子期、天使轮、A轮、准备IPO）",
+            "公司注册地在哪个省份/城市？是否享受特定园区的特殊税收红利？",
+            "日常业务运营是否深度处理大量的用户个人信息或涉及跨境数据传输？",
+            "主营业务是否包含特殊行政许可项（如ICP许可证、食品经营许可、网络文化经营许可）？",
+            "未来12个月内是否有明确的外部大额股权融资或官方合规尽职调查（DD）计划？"
+        ],
+        generator: (ans) => `
+# 📋 2024新公司法时代 - 初创企业定制化全维合规事项清单
+
+## 📌 执行摘要
+- **总控合规事项**：针对科技型/初创企业，提炼出核心关键节点事务。
+- **核心红线项**：注册资本实缴5年期规划、个保法隐私政策合规、电子税务局高频申报。
+
+## 🔍 五维立体合规核查台账
+
+### 一、 工商治理合规模块（2024新法基准）
+1. **🔴 注册资本5年实缴合规规划**：
+   - *法定要求*：依据《新公司法》第47条，全面清查认缴时限。需在5年内按期实缴到位。
+   - *当前状态*：□ 待制定实缴方案  □ 已完成首期实缴
+
+### 二、 数据与个人信息安全合规模块（强监管区）
+1. **🔴 平台隐私政策与App收集行为规范**：
+   - *法律依据*：依据《个人信息保护法》第17条，处理个人信息前必须以显著、清晰的语言明示收集边界。
+   - *当前状态*：□ 需部署PIA影响评估  □ 标准隐私政策已上线
+
+## ⚠️ 六维度合规风险评估
+1. **风险定性**：面临工商罚款与列入异常名录、App遭网信办通报下架、税务滞纳金风险。
+2. **发生概率**：高（近年数据合规与实缴出资属于双随机抽查的绝对风口）。
+3. **商业权衡**：早期规范化运营成本远低于后期面临上市或大额融资尽调时的“集中补课”成本。
+4. **紧迫性**：🔥 持续紧迫（法定强制项无任何商业宽限期）。
+
+## 📝 落地行动建议 (Roadmap)
+### 🔴 P0 - 立即执行
+1. 自查官方线上平台的《隐私政策》和用户授权链路，剔除越权索取定位、通讯录的行为。
+2. 建立财务合规专账，由专业会计核对每季度增值税与企业所得税的预缴，严禁零申报带病过夜。
+`
+    }
+};
+
+// 2. 核心状态机控制变量
+let currentSkillId = '';
+let currentQuestionIdx = 0;
+let answersStorage = [];
+
+// 3. 页面初始化渲染技能看板
+function initDashboard() {
+    const container = document.getElementById('skills-container');
+    container.innerHTML = '';
+    
+    Object.keys(skillsRegistry).forEach(key => {
+        const skill = skillsRegistry[key];
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+        card.innerHTML = `
+            <div>
+                <span class="skill-cmd">${skill.cmd}</span>
+                <h3>${skill.name}</h3>
+                <p>${skill.desc}</p>
+            </div>
+            <button class="btn" onclick="startInterview('${key}')">启动技能面试</button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// 4. 视图路由控制
+function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function showGridView() {
+    switchView('grid-view');
+}
+
+// 5. 启动冷启动问答面试流程
+function startInterview(skillId) {
+    currentSkillId = skillId;
+    currentQuestionIdx = 0;
+    answersStorage = [];
+    
+    const skill = skillsRegistry[skillId];
+    document.getElementById('skill-display-name').innerText = `${skill.name} [${skill.cmd}]`;
+    
+    updateQuestionView();
+    switchView('interview-view');
+}
+
+// 6. 问答视图动态更新
+function updateQuestionView() {
+    const skill = skillsRegistry[currentSkillId];
+    const totalQuestions = skill.questions.length;
+    
+    // 更新进度条
+    const progressPercent = (currentQuestionIdx / totalQuestions) * 100;
+    document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+    document.getElementById('progress-step-text').innerText = `问题 ${currentQuestionIdx + 1} / ${totalQuestions}`;
+    
+    // 更新问题正文
+    document.getElementById('question-text').innerText = skill.questions[currentQuestionIdx];
+    
+    // 恢复历史回填数据
+    document.getElementById('answer-input').value = answersStorage[currentQuestionIdx] || '';
+    
+    // 按钮状态控制
+    document.getElementById('prev-btn').style.visibility = currentQuestionIdx === 0 ? 'hidden' : 'visible';
+    document.getElementById('next-btn').innerText = currentQuestionIdx === totalQuestions - 1 ? '一键生成交付物' : '下一步';
+    document.getElementById('answer-input').focus();
+}
+
+// 7. 向前/向后步骤进退控制器
+function nextQuestion() {
+    const skill = skillsRegistry[currentSkillId];
+    const currentAnswer = document.getElementById('answer-input').value.trim();
+    
+    // 允许留空，但做基础填充提示
+    answersStorage[currentQuestionIdx] = currentAnswer || "用户选择跳过或未详细提供此项特定要素要素数据。";
+    
+    if (currentQuestionIdx < skill.questions.length - 1) {
+        currentQuestionIdx++;
+        updateQuestionView();
+    } else {
+        // 到达最后一步，执行交付物渲染
+        renderDeliverable();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIdx > 0) {
+        // 保存当前文本再后退
+        answersStorage[currentQuestionIdx] = document.getElementById('answer-input').value.trim();
+        currentQuestionIdx--;
+        updateQuestionView();
+    }
+}
+
+// 8. 渲染并交付结构化法律备忘录
+function renderDeliverable() {
+    const skill = skillsRegistry[currentSkillId];
+    const rawMarkdown = skill.generator(answersStorage);
+    
+    // 解析最核心的基础Markdown语法（标题、表格、加粗、颜色高亮标签），保证前端优雅呈现
+    let htmlOutput = rawMarkdown
+        .replace(/^# (.*)$/gm, '<h1>$1</h1>')
+        .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+        .replace(/^### (.*)$/gm, '<h3>$1</h3>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/🟢/g, '<span style="color:var(--success-color)">🟢</span>')
+        .replace(/🟡/g, '<span style="color:var(--warning-color)">🟡</span>')
+        .replace(/🔴/g, '<span style="color:var(--danger-color)">🔴</span>');
+
+    // 处理表格渲染
+    const lines = htmlOutput.split('\n');
+    let inTable = false;
+    let tableHtml = '';
+    
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim().startsWith('|')) {
+            if (!inTable) {
+                inTable = true;
+                tableHtml = '<table>';
+            }
+            const cells = lines[i].split('|').map(c => c.trim()).filter((c, idx, arr) => idx > 0 && idx < arr.length - 1);
+            if (lines[i].includes(':---') || lines[i].includes('---:')) {
+                continue;
+            }
+            tableHtml += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+            lines[i] = ''; 
+        } else {
+            if (inTable) {
+                inTable = false;
+                tableHtml += '</table>';
+                lines[i - 1] = tableHtml; 
+            }
+        }
+    }
+    
+    htmlOutput = lines.filter(l => l !== '').join('\n');
+
+    // 附带标准的法律免责声明声明尾部
+    htmlOutput += `
+        <hr style="margin:30px 0; border:0; border-top:1px solid var(--border-color);">
+        <p style="color:var(--text-muted); font-size:0.85rem; font-style:italic;">
+            ⚠️ <strong>免责声明：</strong>本工作区输出之报告系依据您提供的表单要素数据经AI模型规则引擎推演生成之法律结构草稿，不构成执业律师出具的正式法律意见书。对于重大资产股权设计、核心用工解雇诉讼或大额涉诉合同，建议委派公司法务或外部专业执业律师团队进行定向深度穿透审查。
+        </p>
+    `;
+
+    // 缓存原始Markdown
+    document.getElementById('output-content').setAttribute('data-raw-md', rawMarkdown);
+    document.getElementById('output-content').innerHTML = htmlOutput;
+    
+    switchView('result-view');
+}
+
+// 9. 剪贴板复制增强工具
+function copyOutput() {
+    const rawMd = document.getElementById('output-content').getAttribute('data-raw-md');
+    navigator.clipboard.writeText(rawMd.trim()).then(() => {
+        alert('🎉 原始标准 Markdown 文本已成功复制至您的剪贴板，可直接粘贴至 Notion、飞书文档、语雀或 Word 中！');
+    }).catch(err => {
+        alert('复制失败，请手动选定文本进行复制。');
+    });
+}
+
+// 自动引导看板加载
+window.onload = initDashboard;
+</script>
+
 </body>
 </html>
