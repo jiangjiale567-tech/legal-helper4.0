@@ -335,6 +335,108 @@
       line-height: 1.6; 
     }
 
+    /* 📌 新增：“创业法律日历”独立模块原生 CSS */
+    .calendar-box {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 28px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 40px;
+    }
+    .calendar-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .calendar-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .calendar-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .timeline-stage {
+      border-top: 4px solid var(--border-color);
+      padding-top: 16px;
+    }
+    .stage-red { border-top-color: var(--red-indicator); }
+    .stage-yellow { border-top-color: var(--yellow-indicator); }
+    .stage-green { border-top-color: #10b981; }
+    
+    .stage-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .stage-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .stage-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .stage-red .stage-badge { background: #fee2e2; color: var(--red-indicator); }
+    .stage-yellow .stage-badge { background: #fef3c7; color: var(--yellow-indicator); }
+    .stage-green .stage-badge { background: #d1fae5; color: #047857; }
+    
+    .stage-tip {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .node-item {
+      background: #f9fafb;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 12px;
+      padding: 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .node-item:hover {
+      background: #f3f4f6;
+    }
+    .node-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      outline: none;
+      font-weight: 500;
+    }
+    .node-summary::-webkit-details-marker { display: none; }
+    .node-summary::marker { display: none; }
+    
+    .node-detail-text {
+      font-size: 12px;
+      color: #4b5563;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+      line-height: 1.6;
+    }
+    .node-link {
+      font-size: 12px;
+      color: var(--link-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .node-link:hover {
+      text-decoration: underline;
+    }
+
     .tools-section-title {
       font-size: 18px;
       color: var(--text-main);
@@ -728,6 +830,8 @@
       .btn-quick { width: 100%; }
       .tool-select-pills { flex-wrap: wrap; }
       .hero-title { font-size: 22px; }
+      /* 📌 新增：日历手机端响应式 */
+      .timeline-grid { grid-template-columns: 1fr; gap: 16px; }
     }
   </style>
 </head>
@@ -878,6 +982,115 @@
             </div>
             <div class="skill-title">合规事项清单生成</div>
             <p class="skill-desc">结合行业特许经营资质、公章流转追溯、公司内部治理程序生成防御合规清单。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📌 已完美插入：“创业法律日历”独立交互模块（采用原生统一样式变量） -->
+    <div class="calendar-box">
+      <div class="calendar-header">
+        <h3>🗓️ 创业法律日历</h3>
+        <p>精准对齐企业合规生命周期，一眼看清当前阶段与下一步重点工作</p>
+      </div>
+
+      <div class="timeline-grid">
+        <!-- 🔴 阶段 1：起步期 -->
+        <div class="timeline-stage stage-red">
+          <div class="stage-meta">
+            <span class="stage-title">🔴 起步期</span>
+            <span class="stage-badge">第1个月</span>
+          </div>
+          <p class="stage-tip">“地基不牢，地动山摇。”</p>
+          
+          <div class="stage-nodes">
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>🏢 工商登记</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:compliance-checklist')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《中华人民共和国公司法》，设立公司应当依法向公司登记机关申请设立登记。未经依法登记，不得以公司名义从事经营活动。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>✍️ 合伙协议签署</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:equity-calculation')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《民法典》合伙合同章程，明确合伙人的出资比例、分配红利、表决权及退出机制，避免后期因利益分配不均导致团队解体。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>🏦 银行开户</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:compliance-checklist')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《人民币银行结算账户管理办法》，企业经营性收支需通过境内银行结算账户办理，严禁公私账户混用以防范税务与财务法律风险。</p>
+            </details>
+          </div>
+        </div>
+
+        <!-- 🟡 阶段 2：磨合期 -->
+        <div class="timeline-stage stage-yellow">
+          <div class="stage-meta">
+            <span class="stage-title">🟡 磨合期</span>
+            <span class="stage-badge">第6个月</span>
+          </div>
+          <p class="stage-tip">“规矩立早，纠纷变少。”</p>
+          
+          <div class="stage-nodes">
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>📝 劳动合同补签</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:labor-risk-check')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《中华人民共和国劳动合同法》，建立劳动关系，应当自用工之日起一个月内订立书面劳动合同。超过一年未签需支付双倍工资。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>®️ 核心商标注册</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:ip-protection-plan')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《中华人民共和国商标法》，我国实行申请在先原则。尽早为核心品牌、产品名申请商标，防止被恶意抢注。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>📘 员工手册建立</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:labor-risk-check')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《劳动合同法》第四条，用人单位在制定直接涉及劳动者切身利益的规章制度时，应当经职工代表大会或者全体职工讨论。</p>
+            </details>
+          </div>
+        </div>
+
+        <!-- 🟢 阶段 3：成长期 -->
+        <div class="timeline-stage stage-green">
+          <div class="stage-meta">
+            <span class="stage-title">🟢 成长期</span>
+            <span class="stage-badge">第1年</span>
+          </div>
+          <p class="stage-tip">“合规经营，行稳致远。”</p>
+          
+          <div class="stage-nodes">
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>📊 年报公示</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:compliance-checklist')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《企业信息公示暂行条例》，企业应当于每年1月1日至6月30日向市场监督管理部门报送上一年度年度报告并向社会公示，逾期将被列入异常名录。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>🛡️ 社保规范化</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:labor-risk-check')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《中华人民共和国社会保险法》，用人单位应当自用工之日起三十日内为其职工向社会保险经办机构申请办理社会保险登记并足额缴纳。</p>
+            </details>
+            <details class="node-item">
+              <summary class="node-summary">
+                <span>🔍 合同模板审查</span>
+                <a href="javascript:void(0)" onclick="initWizard(null, '/startup:contract-review')" class="node-link">一键直达 ➔</a>
+              </summary>
+              <p class="node-detail-text"><strong>法律依据简述：</strong>依据《民法典》合同编，对高频业务合同（如采购、销售、合伙）进行标准化模板审查，堵塞履行漏洞，沉淀企业风控资产。</p>
+            </details>
           </div>
         </div>
       </div>
@@ -1361,7 +1574,7 @@
         title: "股权分配比例合理度评估问卷",
         nodes: [
           { q: "1. 公司目前创始团队的合伙人总共有多少人？", options: ["1个人独资控股", "2-3名核心联合创始人", "4名以上多头初创合伙"] },
-          { q: "2. 公司大股东（大表姐/创始人）在工商登记中的直接持股比例是否跨过 67% 绝对控制线？", options: ["是，持股超过67%，拥有绝对话语权", "在51%-66%之间，属于相对控股", "低于50%，且未签任何一致行动人协议"] },
+          { q: "2. 公司大股东（大表姐/创始人）在工商登记中的直接持股比例是否跨过 67% 绝对控制线？", options: ["试，持股超过67%，拥有绝对话语权", "在51%-66%之间，属于相对控股", "低于50%，且未签任何一致行动人协议"] },
           { q: "3. 团队内部是否存在口头约定的显名与隐名股份，且未签署任何《书面股权代持协议》？", options: ["完全口头约定，无任何字据", "不存在代持，工商登记与内部合伙协议百分百合一", "签有内部秘密代持字据，打擦边球"] },
           { q: "4. 合伙人的股权分配中，是否明确设置了4年分期成熟（Vesting）与中途退出股份强制收回条款？", options: ["完全没有约定，属于拿了随时能走", "在《合伙协议》中白纸黑字严格锁定回购路径", "仅口头交代要长期合作"] },
           { q: "5. 是否为核心高管或后续技术团队预留了期权池（ESOP）？", options: ["未作规划", "已预留在创始人名下代持（10%左右）", "已组建了持股平台（有限合伙企业LLC）"] }
@@ -1465,7 +1678,7 @@
       
       refreshWizardButtons();
 
-      // ✨ 关键修复：让页面平滑滚动跳转到问卷面板
+      // ✨ 让页面平滑滚动跳转到问卷面板
       document.getElementById('wizard-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
