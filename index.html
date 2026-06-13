@@ -65,7 +65,6 @@
       gap: 8px; 
     }
 
-    /* ⚡ 核心新增：冲击力 Hero 价值主张视觉区 */
     .hero-container {
       text-align: center;
       padding: 40px 0 24px 0;
@@ -88,7 +87,6 @@
       font-weight: 400;
     }
     
-    /* ⚡ 核心新增：场景化高转化率导航模块 */
     .scenario-headline {
       font-size: 14px;
       font-weight: 600;
@@ -220,7 +218,6 @@
       height: 15px;
     }
     
-    /* ⚡ 优化：创业安全指数多反馈面板 */
     .health-result-panel {
       display: none;
       margin-top: 24px;
@@ -742,7 +739,6 @@
     </div>
   </header>
 
-  <!-- ⚡ 核心修改：文案美味化 Hero 视觉转化引擎区 -->
   <div class="hero-container">
     <div class="container">
       <h1 class="hero-title">创业避坑指南：5分钟识别并化解核心法律风险</h1>
@@ -752,7 +748,6 @@
 
   <div class="container">
 
-    <!-- ⚡ 核心新增：“场景化”快速功能直达雷达导航 -->
     <div class="scenario-headline">💡 痛点直击：请选择您当前最担忧的底层高危场景</div>
     <div class="scenario-nav-grid">
       <div class="scenario-card-btn" onclick="triggerScenarioRoute(0)">
@@ -769,12 +764,10 @@
       </div>
     </div>
 
-    <!-- 免责声明 -->
     <div class="disclaimer-bar">
       <strong>⚠️ 免责声明：</strong>本系统输出为大模型辅助法务草稿，不构成法律意见。针对重大诉讼事项建议由执业律师进行专项合规审查。
     </div>
 
-    <!-- 1. 快速入口：企业基础合规自测模块 -->
     <div class="quick-box" style="margin-bottom: 32px;">
       <h3>⚡ 快速入口：企业基础合规诊断自测</h3>
       <p class="quick-subtitle">请根据企业当前实际落地现状，勾选已完成的合规事项，一键摸底底层合规健康水位线：</p>
@@ -808,7 +801,6 @@
       
       <button class="btn-quick" onclick="calculateComplianceHealth()">一键评估合规健康度</button>
 
-      <!-- ⚡ 优化：创业安全指数情绪价值反馈面板 -->
       <div id="quick-health-result-box" class="health-result-panel">
         <div class="health-score-row">
           <span class="health-score-title">当前核心团队的【创业安全指数】：</span>
@@ -818,7 +810,6 @@
       </div>
     </div>
 
-    <!-- 三层知识体系 -->
     <div class="knowledge-container">
       <div class="knowledge-title">🛡️ 底层司法大数据驱动检索源说明</div>
       <div class="knowledge-grid">
@@ -834,16 +825,12 @@
       </div>
     </div>
 
-    <!-- 双模式入口 -->
     <div class="entry-layout">
-      <!-- 深度入口 -->
       <div id="deep-skills-anchor">
         <div class="skills-section-title">🎯 深度入口：专项精细化合规扫描</div>
         <div class="skills-section-desc">请点击下方具体的技能卡片。系统将为您立即拉起定向交互问卷，深度排查特定垂直领域的诉讼及管理隐患。</div>
         
-        <!-- 6个技能卡片展示区 -->
         <div class="skills-grid">
-          <!-- 1. 股权 -->
           <div class="skill-card" onclick="initWizard(this, '/startup:equity-calculation')">
             <div class="skill-meta">
               <span class="skill-icon">📊</span>
@@ -852,7 +839,6 @@
             <div class="skill-title">股权分配比例合理度评估</div>
             <p class="skill-desc">评估创始团队持股健康度，审查是否存在动态调整缺失或绝对控制权稀释风险。</p>
           </div>
-          <!-- 2. 用工 -->
           <div class="skill-card" onclick="initWizard(this, '/startup:labor-risk-check')">
             <div class="skill-meta">
               <span class="skill-icon">👷</span>
@@ -861,7 +847,6 @@
             <div class="skill-title">用工合规风险扫描</div>
             <p class="skill-desc">排查劳动合同签署时效、规章制度民主公示程序、加班费及违法解除金（2N）敞口。</p>
           </div>
-          <!-- 3. IP -->
           <div class="skill-card" onclick="initWizard(this, '/startup:ip-protection-plan')">
             <div class="skill-meta">
               <span class="skill-icon">💡</span>
@@ -870,7 +855,6 @@
             <div class="skill-title">知识产权保护方案</div>
             <p class="skill-desc">扫描外包研发代码归属、核心资产保护盲区以及技术人员流失带来的商业秘密风险。</p>
           </div>
-          <!-- 4. 成本 -->
           <div class="skill-card" onclick="initWizard(this, '/startup:cost-analysis')">
             <div class="skill-meta">
               <span class="skill-icon">💰</span>
@@ -879,7 +863,6 @@
             <div class="skill-title">辞职创业成本量化</div>
             <p class="skill-desc">排查前雇主竞业限制协议规避成本，阻断利用原单位职务成果引发的侵权追责。</p>
           </div>
-          <!-- 5. 合同 -->
           <div class="skill-card" onclick="initWizard(this, '/startup:contract-review')">
             <div class="skill-meta">
               <span class="skill-icon">📜</span>
@@ -888,7 +871,6 @@
             <div class="skill-title">初创期合同快速审查</div>
             <p class="skill-desc">审查业务主合同的违约金比例合规性、争议管辖地防线、账期节点及结算证据闭环。</p>
           </div>
-          <!-- 6. 合规 -->
           <div class="skill-card" onclick="initWizard(this, '/startup:compliance-checklist')">
             <div class="skill-meta">
               <span class="skill-icon">📋</span>
@@ -901,12 +883,10 @@
       </div>
     </div>
 
-    <!-- 新增模块：创业落地实战工具集 -->
     <div class="tools-section-title">🛠️ 落地实战：创业核心合规工具集</div>
     <div class="tools-section-desc">赋能初创企业全生命周期落地，提供立等可取的自动化法律协议草稿与股权动态稀释数据台账。</div>
     
     <div class="tools-grid">
-      <!-- 工具栏 1：简易合同生成器 -->
       <div class="tool-panel-card">
         <h4>📜 简易合同文书自动化生成器</h4>
         <div class="tool-select-pills">
@@ -928,7 +908,6 @@
         </div>
       </div>
 
-      <!-- 工具栏 2：股权计算器（可视化版） -->
       <div class="tool-panel-card">
         <h4>📊 股权多维合规计算器（动态稀释版）</h4>
         <div class="calc-flex-container">
@@ -982,7 +961,6 @@
       </div>
     </div>
 
-    <!-- 问卷交互面板 -->
     <div id="wizard-box" class="wizard-panel">
       <div class="wizard-title-box">
         <h3 id="wizard-label-title" style="font-size:15px; font-weight:600;">定向问卷</h3>
@@ -997,21 +975,17 @@
       </div>
     </div>
 
-    <!-- 加载过程 -->
     <div id="loading-spinner" class="run-loading">
       <div class="spin"></div>
       <p style="font-size:13px; color:var(--text-muted);">底层检索中，正在使用高级解析引擎渲染格式化报告...</p>
     </div>
 
-    <!-- 报告预览模块 -->
     <div id="report-view-block" class="report-block"></div>
 
-    <!-- 真实案例库 -->
     <div class="cases-section" id="case-library">
       <div class="cases-title">⚖️ 真实裁判文书案例库参考依据</div>
       <div class="cases-desc">覆盖股权、用工、合同、知识产权四大主流核心商事领域，指引合规实体判定。</div>
       <div class="cases-grid">
-        <!-- 股权 -->
         <div class="case-card">
           <div>
             <div class="case-meta"><span class="case-id">(2012)民提字第63号</span><span>最高人民法院公报案例</span></div>
@@ -1028,7 +1002,6 @@
           </div>
           <a class="case-link-btn" href="https://wenshu.court.gov.cn/website/wenshu/181217BMTK9D5SA1/index.html?searchId=最高法民再351号" target="_blank">🔗 查看裁判原文</a>
         </div>
-        <!-- 劳动 -->
         <div class="case-card">
           <div>
             <div class="case-meta"><span class="case-id">(2020)最高法民申6120号</span><span>最高人民法院审查案</span></div>
@@ -1045,7 +1018,6 @@
           </div>
           <a class="case-link-btn" href="https://wenshu.court.gov.cn/website/wenshu/181217BMTK9D5SA1/index.html?searchId=京01民终2453号" target="_blank">🔗 查看裁判原文</a>
         </div>
-        <!-- 合同 -->
         <div class="case-card">
           <div>
             <div class="case-meta"><span class="case-id">(2020)最高法民终1216号</span><span>最高人民法院商事终审</span></div>
@@ -1062,12 +1034,11 @@
           </div>
           <a class="case-link-btn" href="https://wenshu.court.gov.cn/website/wenshu/181217BMTK9D5SA1/index.html?searchId=最高法民终815号" target="_blank">🔗 查看裁判原文</a>
         </div>
-        <!-- 知识产权 -->
         <div class="case-card">
           <div>
             <div class="case-meta"><span class="case-id">(2019)最高法知民终117号</span><span>最高法知识产权法庭</span></div>
             <div class="case-name">某技术公司与某机械制造企业专利侵权诉讼案</div>
-            <div class="case-text"><strong>要点：</strong>深度阐述专利技术判定中“等同原则”的适用尺度。若涉案技术特征与专利特征在手段、功能和效果上基本相同，且对技术人员不需创造性劳动即可联想，构成侵权。</div>
+            <div class="case-text"><strong>要点：</strong>深度阐述专利技术判定中“等同原则”的适用尺度。若涉案技术特征与专利特征在手段、功能和效果上基本相同，且对技术人员不需创造性劳动即可联想，构成侵权.</div>
           </div>
           <a class="case-link-btn" href="https://wenshu.court.gov.cn/website/wenshu/181217BMTK9D5SA1/index.html?searchId=最高法知民终117号" target="_blank">🔗 查看裁判原文</a>
         </div>
@@ -1091,9 +1062,6 @@
   </footer>
 
   <script>
-    // ==========================================
-    // 基础配置与模板库注册声明
-    // ==========================================
     const contractTemplatesDb = {
       nda: {
         fields: [
@@ -1190,20 +1158,14 @@
       recalculateEquityMatrix();
     });
 
-    // ⚡ 核心新增：“场景化”极速联动分流器
     function triggerScenarioRoute(cardIndex) {
       const cards = document.querySelectorAll('.skill-card');
       if (cards && cards[cardIndex]) {
-        cards[cardIndex].click(); // 自动模拟激活卡片点击并展开问卷
-        
-        // 丝滑滚动到深度扫描区域
+        cards[cardIndex].click(); 
         document.getElementById('wizard-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
-    // ==========================================
-    // ⚡ 优化：创业安全指数核心反馈机制算法
-    // ==========================================
     function calculateComplianceHealth() {
       const checkItems = document.querySelectorAll('.health-chk-item');
       let checkedCount = 0;
@@ -1221,19 +1183,16 @@
       resultBox.style.display = 'block';
       
       if (scorePercent >= 80) {
-        // 🟢 盾牌鼓励与高安全提示
         resultBox.style.background = '#f0fdf4';
         resultBox.style.borderColor = '#bbf7d0';
         scoreTarget.style.color = '#16a34a';
         adviceTarget.innerHTML = `<strong>🛡️ 盾牌状态：安全屏障牢固！</strong> 恭喜，您的底层公司经营架构已经具备了律所级的合规雏形，大幅拉开了与普通“裸奔”初创公司的差距。建议利用下方的【落地实战工具集】锁定技术及合同核心资产。`;
       } else if (scorePercent >= 60) {
-        // 🟡 正常状态提示
         resultBox.style.background = '#fefce8';
         resultBox.style.borderColor = '#fef08a';
         scoreTarget.style.color = '#d97706';
         adviceTarget.innerHTML = `<strong>⚠️ 预警状态：脆弱的动态平衡。</strong> 公司虽有一套基础制度，但核心痛点漏洞仍旧明显（未勾选项）。当前状态极易“平时没任何事，一旦被员工或竞品起诉必然一败涂地”，请立刻开展下方的精准定向诊断。`;
       } else {
-        // 🔴 火山口高危扎心红警
         resultBox.style.background = '#fef2f2';
         resultBox.style.borderColor = '#fecaca';
         scoreTarget.style.color = '#dc2626';
@@ -1241,9 +1200,6 @@
       }
     }
 
-    // ==========================================
-    // 简易合同文书自动化生成器引擎
-    // ==========================================
     function switchContractTemplate(tmplKey) {
       activeContractTemplateKey = tmplKey;
       
@@ -1308,9 +1264,6 @@
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
-    // ==========================================
-    // 股权多维合规计算器与图表实时引擎
-    // ==========================================
     function recalculateEquityMatrix() {
       const names = [];
       const weights = [];
@@ -1404,9 +1357,6 @@
       });
     }
 
-    // ==========================================
-    // 深度入口六大专项知识树问卷逻辑
-    // ==========================================
     const wizardDb = {
       '/startup:equity-calculation': {
         title: "股权分配比例合理度评估问卷",
@@ -1423,7 +1373,7 @@
         nodes: [
           { q: "1. 员工正式上岗后，公司最晚在多少天内与其订立了正式的《书面劳动合同》？", options: ["入职当天至1周内办妥", "已经超过30天仍未实际签署", "未签劳动合同，仅签了劳务外包或兼职协议"] },
           { q: "2. 公司的员工手册、惩罚考勤等管理办法，是否履行过职工代表会议民主讨论并由员工签字确认收悉？", options: ["完全没做程序，仅口头通知", "全员履行过民主讨论并签署了《签收确认书》", "直接发到了工作群里，没有个人签字证明"] },
-          { q: "3. 针对公司掌握核心客户资源、源代码的核心骨干，是否依法签有单独的《竞业限制与保密协议》？", options: ["重点人员全部签齐，且包含补偿金标准", "只签了宽泛的简易保密条款，无竞业惩罚约束", "未签任何保密及核心竞业防线"] },
+          { q: "3. 针对公司掌握核心客户资源、源代码的核心骨存，是否依法签有单独的《竞业限制与保密协议》？", options: ["重点人员全部签齐，且包含补偿金标准", "只签了宽泛的简易保密条款，无竞业惩罚约束", "未签任何保密及核心竞业防线"] },
           { q: "4. 公司现阶段是否存在未足额购买五险一金，或让职工自行签署《自愿放弃购买社保声明》的情形？", options: ["全员足额申报", "部分员工因个人原因签署了放弃购买声明", "存在推迟申报、按最低标准申报或找第三方公司代缴"] },
           { q: "5. 公司对节假日、周末加班的考核，是否设置了正规防线审批，并依法匹配调休或两/三倍工资？", options: ["属于责任制，无调休无加班费", "有严格的加班审批及对标发放结算流", "仅提供少量餐饮交通补贴"] }
         ]
@@ -1431,7 +1381,7 @@
       '/startup:ip-protection-plan': {
         title: "知识产权与无形资产防御问卷",
         nodes: [
-          { q: "1. 公司目前的官方核心产品、系统源代码、设计图等，是否存在假手于外部外包开发团队的情形？", options: ["有外包开发，且合同对所有权归属定义不清", "由外包开发，但在外包合同中白纸黑字闭环归我方", "全权由内部签署有《职务成果归属单》的全职团队开发"] },
+          { q: "1. 公司目前的官方核心 product、系统源代码、设计图等，是否存在假手于外部外包开发团队的情形？", options: ["有外包开发，且合同对所有权归属定义不清", "由外包开发，但在外包合同中白纸黑字闭环归我方", "全权由内部签署有《职务成果归属单》的全职团队开发"] },
           { q: "2. 公司的核心系统代码资产，目前是否按季度在国家版权局及时完成软件著作权登记？", options: ["系统已上线跑业务，但从未申报软著", "已全面取得软著权登记证书", "正在申请排队阶段，未做任何第三方时间戳存证"] },
           { q: "3. 团队在职开发或核心设计人员，其使用的终端设备与代码外发，公司是否具备加密审计技术手段？", options: ["没有任何隔离，员工可用私人微信网盘随意传输", "部署了防泄密沙箱系统或代码资产权限深度隔离", "仅在口头上做要求"] },
           { q: "4. 新入职的行业资深员工在进行产品研发时，公司是否排查过其可能携带、套用原单位核心商业秘密的隐患？", options: ["未作严审排查", "入职前严格签署了《不侵犯第三方秘密知悉书》并开展代码合规过筛", "业务完全独立，无接触前东家秘密可能"] },
